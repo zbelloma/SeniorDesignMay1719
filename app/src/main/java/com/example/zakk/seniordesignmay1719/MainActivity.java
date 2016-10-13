@@ -1,0 +1,102 @@
+package com.example.zakk.seniordesignmay1719;
+
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+public class MainActivity extends AppCompatActivity {
+
+    BluetoothAdapter mBluetoothAdapter;
+    int REQUEST_ENABLE_BT = 1;
+    Set<BluetoothDevice> pairedDevices;
+    List<String> listViewData = new ArrayList<String>();
+    ListView lv;
+    ArrayAdapter<String> arrAdapter;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        lv = (ListView)findViewById(R.id.bluetoohLV);
+        arrAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewData);
+        lv.setAdapter(arrAdapter);
+
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        mBluetoothAdapter.cancelDiscovery();
+        try{
+            if(mReciever != null){
+                unregisterReceiver(mReciever);
+            }
+        }catch (IllegalArgumentException e){
+            Log.e(" ", e.getMessage());
+        }
+    }
+
+    private BroadcastReceiver mReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(BluetoothDevice.ACTION_FOUND.equals(action)){
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                arrAdapter.add(device.getName() + "\n" + device.getAddress()); //may need to move this
+                Log.v(" ", "DEVICE FOUND");
+            }
+        }
+    };
+
+    public void enableBluetooh(View view){
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(mBluetoothAdapter == null){
+            Log.e(" ", "bluetooth adapter not enabled");
+        }
+        if(!mBluetoothAdapter.isEnabled()){
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            sendBroadcast(enableBtIntent);
+        }
+
+        pairedDevices = mBluetoothAdapter.getBondedDevices();
+        if(pairedDevices.size() > 0){
+            for(BluetoothDevice device : pairedDevices){
+                arrAdapter.add(device.getName() + "/n" + device.getAddress());
+            }
+        }
+    }
+
+    public void bluetoothScan(View view){
+
+        if(mBluetoothAdapter.isDiscovering()){
+            Log.e(" ", "discovery in progress. and you cancled the in progress one");
+            mBluetoothAdapter.cancelDiscovery();
+        }
+
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        this.registerReceiver(mReciever, filter);
+        mBluetoothAdapter.startDiscovery();
+
+    }
+
+    public void endDiscovery(View view){
+        mBluetoothAdapter.cancelDiscovery();
+    }
+}
+

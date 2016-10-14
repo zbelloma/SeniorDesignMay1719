@@ -37,5 +37,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp"
         android:id="@+id/bluetoohLV"
-        android:background="@android:drawable/alert_dark_frame" />
+        android:background="@android:drawable/alert_light_frame" />
 </RelativeLayout>

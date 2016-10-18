@@ -1,12 +1,18 @@
 package com.example.zakk.seniordesignmay1719;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.le.BluetoothLeScanner;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +27,7 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     BluetoothAdapter mBluetoothAdapter;
+    BluetoothLeScanner testScanner;
     int REQUEST_ENABLE_BT = 1;
     Set<BluetoothDevice> pairedDevices;
     List<String> listViewData = new ArrayList<String>();
@@ -36,12 +43,15 @@ public class MainActivity extends AppCompatActivity {
         arrAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewData);
         lv.setAdapter(arrAdapter);
 
+        int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+               MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION); //testing for android 6.0
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        mBluetoothAdapter.cancelDiscovery();
+     //   mBluetoothAdapter.cancelDiscovery();
         try{
             if(mReciever != null){
                 unregisterReceiver(mReciever);
@@ -63,8 +73,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void enableBluetooh(View view){
+    public void enableBluetooth(View view){
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        arrAdapter.clear();
         if(mBluetoothAdapter == null){
             Log.e(" ", "bluetooth adapter not enabled");
         }
@@ -91,7 +102,18 @@ public class MainActivity extends AppCompatActivity {
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         this.registerReceiver(mReciever, filter);
-        mBluetoothAdapter.startDiscovery();
+
+        if(mBluetoothAdapter.isDiscovering()){
+            mBluetoothAdapter.cancelDiscovery();
+        }
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            mBluetoothAdapter.startDiscovery();
+        }
+
+        Log.i("BLUETOOTH", String.valueOf(mBluetoothAdapter.getState()));
+        Log.i("BLUETOOTH", "Bluetooth Enabled: " + mBluetoothAdapter.isEnabled());
+        Log.i("BLUETOOTH", "val: " + mBluetoothAdapter.isDiscovering()); // Return false
+
 
     }
 

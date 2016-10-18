@@ -17,7 +17,7 @@
         android:layout_marginTop="15dp"
         android:id="@+id/enableButton"
         android:layout_centerHorizontal="true"
-        android:onClick="enableBluetooh" />
+        android:onClick="enableBluetooth" />
 
     <Button
         android:text="Scan"

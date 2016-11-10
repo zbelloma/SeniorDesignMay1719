@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     int REQUEST_ENABLE_BT = 1;
     Set<BluetoothDevice> pairedDevices;
     List<String> listViewData = new ArrayList<String>();
+    List<BluetoothDevice> deviceList = new ArrayList<>();
     ListView lv;
     ArrayAdapter<String> arrAdapter;
 
@@ -42,6 +44,18 @@ public class MainActivity extends AppCompatActivity {
         lv = (ListView)findViewById(R.id.bluetoohLV);
         arrAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewData);
         lv.setAdapter(arrAdapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position,
+                                    long arg3)
+            {
+                String value = (String)adapter.getItemAtPosition(position);
+                Log.e("LIST", "Pos in List: " + position);
+                listItemClick(deviceList.get(position));
+            }
+        });
 
         int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -68,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             if(BluetoothDevice.ACTION_FOUND.equals(action)){
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 arrAdapter.add(device.getName() + "\n" + device.getAddress()); //may need to move this
+                deviceList.add(device);
                 Log.v(" ", "DEVICE FOUND");
             }
         }
@@ -89,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         if(pairedDevices.size() > 0){
             for(BluetoothDevice device : pairedDevices){
                 arrAdapter.add(device.getName() + "/n" + device.getAddress());
+                deviceList.add(device);
             }
         }
     }
@@ -114,6 +130,14 @@ public class MainActivity extends AppCompatActivity {
         Log.i("BLUETOOTH", "Bluetooth Enabled: " + mBluetoothAdapter.isEnabled());
         Log.i("BLUETOOTH", "val: " + mBluetoothAdapter.isDiscovering()); // Return false
 
+
+    }
+
+    public void listItemClick(BluetoothDevice device){
+        mBluetoothAdapter.cancelDiscovery();
+        ConnectThread mConnectThread = new ConnectThread(device);
+        mConnectThread.start();
+        //mConnectThread.run(mBluetoothAdapter);
 
     }
 

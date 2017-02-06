@@ -21,6 +21,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -75,6 +78,45 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static String[] output_to_pixels(String input){
+        //input = input.replace("\n", "");
+        String[] output_Data = input.split(" ");
+
+        String data_Mode = output_Data[2]; //0-WORDS (16-bit pixel values), 1-DWORDS (32-bit pixel values)
+        //String scans = output_Data[3]; //Number of scans taken
+        //String integration_Time = output_Data[4]; //Time taken to obtain sample data
+        String pixels[] = new String[(output_Data.length-9)/2];
+        Integer pixel_Index = 0;
+
+        if(data_Mode.equals("0")){
+            for(int i = 8; i < output_Data.length-2; i += 2){
+                pixels[pixel_Index] = output_Data[i+1] + output_Data[i];
+                pixel_Index++;
+            }
+        } else {
+            for(int i = 8; i < output_Data.length; i+=4){
+                pixels[pixel_Index] = output_Data[i+3] + output_Data[i+2] + output_Data[i+1] + output_Data[i];
+                pixel_Index++;
+            }
+        }
+
+        return pixels;
+    }
+
+
+    public void dbget(View view){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+
+        myRef.setValue("Hello, World!");
+    }
+
+    public void dbview(View view){
+        Intent intent = new Intent(this, DisplayDBActivity.class);
+        startActivity(intent);
+    }
+
+
     private BroadcastReceiver mReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -112,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     public void bluetoothScan(View view){
 
         if(mBluetoothAdapter.isDiscovering()){
-            Log.e(" ", "discovery in progress. and you cancled the in progress one");
+            Log.e(" ", "discovery in progress. and you canceled the in progress one");
             mBluetoothAdapter.cancelDiscovery();
         }
 

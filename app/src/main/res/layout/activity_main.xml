@@ -10,32 +10,40 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.zakk.seniordesignmay1719.MainActivity">
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/bluetoohLV"
+        android:background="@android:drawable/alert_light_frame"
+        android:layout_below="@+id/db_button" />
+
     <Button
-        android:text="Enable"
+        android:text="DB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:id="@+id/enableButton"
-        android:layout_centerHorizontal="true"
-        android:onClick="enableBluetooth" />
+        android:id="@+id/db_button"
+        android:layout_below="@+id/startScanButton"
+        android:layout_alignLeft="@+id/startScanButton"
+        android:layout_alignStart="@+id/startScanButton"
+        android:onClick="dbview" />
 
     <Button
         android:text="Scan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:id="@+id/startScanButton"
+        android:onClick="bluetoothScan"
         android:layout_below="@+id/enableButton"
         android:layout_alignLeft="@+id/enableButton"
-        android:layout_alignStart="@+id/enableButton"
-        android:onClick="bluetoothScan" />
+        android:layout_alignStart="@+id/enableButton" />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/startScanButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="33dp"
-        android:id="@+id/bluetoohLV"
-        android:background="@android:drawable/alert_light_frame" />
+    <Button
+        android:text="Enable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/enableButton"
+        android:onClick="enableBluetooth"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

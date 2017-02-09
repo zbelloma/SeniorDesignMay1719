@@ -17,14 +17,18 @@ public class ConnectedThread extends Thread {
 
     public ConnectedThread(BluetoothSocket socket){
         mmSocket = socket;
+        InputStream in = null;
+        OutputStream out = null;
+
         try {
-            InputStream in = socket.getInputStream();
+            in = socket.getInputStream();
             inStream = in;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            OutputStream out = socket.getOutputStream();
+            out = socket.getOutputStream();
             outStream = out;
         } catch (IOException e) {
             e.printStackTrace();

@@ -39,13 +39,14 @@ public class DisplayDBActivity extends AppCompatActivity {
         Dataref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Data data = dataSnapshot.getValue(Data.class);
-                if(data.data != null){
-                    listViewData.add(data.toString());
-                    System.out.println(data.toString());
-                    arrAdapter.notifyDataSetChanged();
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    Data d = postSnapshot.getValue(Data.class);
+                    if(d.data != null){
+                        listViewData.add(d.toString());
+                        System.out.println(d.toString());
+                        arrAdapter.notifyDataSetChanged();
+                    }
                 }
-
             }
 
             @Override
@@ -57,17 +58,17 @@ public class DisplayDBActivity extends AppCompatActivity {
 
     public void setData(View view){
 
-        Data d = new Data("testdata1234");
-        ref.child("data").setValue(d, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError != null) {
-                    System.out.println("Data could not be saved " + databaseError.getMessage());
-                } else {
-                    System.out.println("Data saved successfully.");
-                }
-            }
-        });
+//        Data d = new Data("testdata1234");
+//        ref.child("data").setValue(d, new DatabaseReference.CompletionListener() {
+//            @Override
+//            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                if (databaseError != null) {
+//                    System.out.println("Data could not be saved " + databaseError.getMessage());
+//                } else {
+//                    System.out.println("Data saved successfully.");
+//                }
+//            }
+//        });
     }
 
     public void goBack(View view){

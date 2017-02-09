@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "532096292378",
+    "firebase_url": "https://seniordesignmay1719-771a4.firebaseio.com",
+    "project_id": "seniordesignmay1719-771a4",
+    "storage_bucket": "seniordesignmay1719-771a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532096292378:android:81b6071e9df2164b",
+        "android_client_info": {
+          "package_name": "com.example.zakk.SeniorDesignMay1719"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532096292378-h43ln3hngl3ci2skbi2sa6odp9go2trc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrHQLq9F74-GWUuvu4Lj0CAK8KVuvYIGU"
+        },
+        {
+          "current_key": "AIzaSyAoK3zkjYrKSk-s5Ziyoi3S28RkIBPmSfU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

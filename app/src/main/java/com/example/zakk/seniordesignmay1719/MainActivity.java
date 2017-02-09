@@ -178,10 +178,36 @@ public class MainActivity extends AppCompatActivity {
     public void listItemClick(BluetoothDevice device){
         mBluetoothAdapter.cancelDiscovery();
         ConnectThread mConnectThread = new ConnectThread(device);
-        mConnectThread.start();
+        mConnectThread.start(); //Starts the bluetooth connection thread
         //mConnectThread.run(mBluetoothAdapter);
 
     }
+
+
+    //bullshit for now
+    public void RUNCLICK(){
+
+        /*
+        1: check the connection
+            if active
+                send scan command ('S')
+            else
+                error, need to connect to bluetooth device (popup box?)
+
+        2: read from socket
+
+            check the header,
+            if formatted S 65535 ....
+                read until 65533
+                stop read
+                run output_to_pixels
+                send output_to_pixels, along with other data, to the DB
+
+         */
+
+
+    }
+
 
     public void endDiscovery(View view){
         mBluetoothAdapter.cancelDiscovery();

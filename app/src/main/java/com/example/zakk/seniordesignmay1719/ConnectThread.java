@@ -15,35 +15,50 @@ import java.util.UUID;
 public class ConnectThread extends Thread {
     public BluetoothSocket mmSocket;
     public BluetoothDevice mmDevice;
+    //Default UUID leave as is
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
     public ConnectThread(BluetoothDevice device) {
- //       BluetoothSocket tmp = null;
+        //BluetoothSocket tmp = null;
         mmDevice = device;
         mmSocket = null;
 /*        try {
             tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
         } catch (IOException e) { }
-        mmSocket = tmp;*/
+        mmSocket = tmp;
+*/
     }
     public void run() {
         BluetoothSocket tmp = null;
-        mmDevice = getDevice();
+        //mmDevice = getDevice();
         try {
-            tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID);
+            Log.i("BT", "Device Name: " + mmDevice.getName());
+            Log.i("BT", "Device UUID: " + mmDevice.getUuids()[0].getUuid());
+            tmp = mmDevice.createRfcommSocketToServiceRecord(mmDevice.getUuids()[0].getUuid());
+            //tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID);
         } catch (IOException e) { }
-        mmSocket = tmp;
+            mmSocket = tmp;
 
-        Log.e("Thread", "BLUETOOTH soccket running");
-        //mBluetoothAdapter.cancelDiscovery();
+            Log.d("BT", " UUID from device is null, Using Default UUID, Device name: " + mmDevice.getName());
+            try {
+                tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID);
+            } catch (IOException e1) {
+               e1.printStackTrace();
+            }
+            //Log.e("Thread", "BLUETOOTH soccket running");
+            //mBluetoothAdapter.cancelDiscovery();
+
         try {
             mmSocket.connect();
         } catch (IOException connectException) {
             try {
                 mmSocket.close();
-            } catch (IOException closeException) { }
+            } catch (IOException closeException) {
+                Log.d("BT", "Socket did not connect, and would not close.");
+            }
             return;
         }
     }
+    //Closes the socket, connection, and thread
     public void cancel() {
         try {
             mmSocket.close();

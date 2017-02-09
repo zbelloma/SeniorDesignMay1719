@@ -14,7 +14,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ public class DisplayDBActivity extends AppCompatActivity {
     ListView lv;
     ArrayAdapter<String> arrAdapter;
     List<String> listViewData = new ArrayList<String>();
+    List<String> tempViewData = new ArrayList<String>();
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference();
 
@@ -39,14 +39,15 @@ public class DisplayDBActivity extends AppCompatActivity {
         Dataref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                tempViewData.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Data d = postSnapshot.getValue(Data.class);
-                    if(d.data != null){
-                        listViewData.add(d.toString());
-                        System.out.println(d.toString());
-                        arrAdapter.notifyDataSetChanged();
+                    System.out.println(d.toString());
+                    if (d.data != null && !listViewData.contains(d.id)) {
+                        listViewData.add(d.id);
                     }
                 }
+                arrAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -57,18 +58,9 @@ public class DisplayDBActivity extends AppCompatActivity {
     }
 
     public void setData(View view){
-
-//        Data d = new Data("testdata1234");
-//        ref.child("data").setValue(d, new DatabaseReference.CompletionListener() {
-//            @Override
-//            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-//                if (databaseError != null) {
-//                    System.out.println("Data could not be saved " + databaseError.getMessage());
-//                } else {
-//                    System.out.println("Data saved successfully.");
-//                }
-//            }
-//        });
+        long time = System.currentTimeMillis();
+        Data d = new Data("testdata1234", time);
+        ref.child("data").child(d.id).setValue(d);
     }
 
     public void goBack(View view){

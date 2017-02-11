@@ -24,9 +24,11 @@ import android.widget.ListView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -177,8 +179,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void listItemClick(BluetoothDevice device){
         mBluetoothAdapter.cancelDiscovery();
-        ConnectThread mConnectThread = new ConnectThread(device);
-        mConnectThread.start(); //Starts the bluetooth connection thread
+
+        ConnectThread mConnectThread = new ConnectThread(device, false, mBluetoothAdapter);
+        try{
+            mConnectThread.connect(); //Starts the bluetooth connection thread
+        } catch(IOException e){
+            Log.e("CONNECT", "Connection error: " + e.getMessage());
+        }
         //mConnectThread.run(mBluetoothAdapter);
 
     }

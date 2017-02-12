@@ -9,16 +9,16 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import com.example.zakk.seniordesignmay1719.NativeBluetoothSocket;
 import android.util.Log;
 
 public class ConnectThread{
 
-    private BluetoothSocketWrapper bluetoothSocket;
-    private BluetoothDevice device;
+    private BluetoothSocketWrapper mmSocket;
+    private BluetoothDevice mmDevice;
     private boolean secure;
-    private BluetoothAdapter adapter;
+    private BluetoothAdapter mAdapter;
     private UUID MY_UUID;
-    private int candidate;
 
 
     /**
@@ -30,9 +30,9 @@ public class ConnectThread{
      *                       to the bluetooth dongle.
      */
     public ConnectThread(BluetoothDevice device, boolean secure, BluetoothAdapter adapter) {
-        this.device = device;
+        this.mmDevice = device;
         this.secure = secure;
-        this.adapter = adapter;
+        this.mAdapter = adapter;
         this.MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     }
@@ -44,18 +44,18 @@ public class ConnectThread{
     public BluetoothSocketWrapper connect() throws IOException {
         boolean success = false;
         while (selectSocket()) {
-            adapter.cancelDiscovery();
+            mAdapter.cancelDiscovery();
 
             try {
-                bluetoothSocket.connect();
+                mmSocket.connect();
                 success = true;
                 break;
             } catch (IOException e) {
                 //try the fallback
                 try {
-                    bluetoothSocket = new FallbackBluetoothSocket(bluetoothSocket.getUnderlyingSocket());
+                    mmSocket = new FallbackBluetoothSocket(mmSocket.getUnderlyingSocket());
                     Thread.sleep(500);
-                    bluetoothSocket.connect();
+                    mmSocket.connect();
                     success = true;
                     break;
                 } catch (FallbackException e1) {
@@ -69,91 +69,34 @@ public class ConnectThread{
         }
 
         if (!success) {
-            throw new IOException("Could not connect to device: " + device.getAddress());
+            throw new IOException("Could not connect to device: " + mmDevice.getAddress());
         }
 
-        return bluetoothSocket;
+        return mmSocket;
     }
 
+
+    /**
+     * Allows for the creation of either a secure rfcomm socket, or an insecure one.
+     * @return boolean: true.
+     * @throws IOException
+     */
     private boolean selectSocket() throws IOException {
 
         BluetoothSocket tmp;
-        //UUID uuid = uuidCandidates.get(candidate++);
 
         Log.i("BT", "Attempting to connect to Protocol: " + MY_UUID);
         if (secure) {
-            tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+
+            tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID);
         } else {
-            tmp = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
+            tmp = mmDevice.createInsecureRfcommSocketToServiceRecord(MY_UUID);
         }
-        bluetoothSocket = new NativeBluetoothSocket(tmp);
+        mmSocket = new NativeBluetoothSocket(tmp);
 
         return true;
     }
 
-    public static interface BluetoothSocketWrapper {
-
-        InputStream getInputStream() throws IOException;
-
-        OutputStream getOutputStream() throws IOException;
-
-        String getRemoteDeviceName();
-
-        void connect() throws IOException;
-
-        String getRemoteDeviceAddress();
-
-        void close() throws IOException;
-
-        BluetoothSocket getUnderlyingSocket();
-
-    }
-
-
-    public static class NativeBluetoothSocket implements BluetoothSocketWrapper {
-
-        private BluetoothSocket socket;
-
-        public NativeBluetoothSocket(BluetoothSocket tmp) {
-            this.socket = tmp;
-        }
-
-        @Override
-        public InputStream getInputStream() throws IOException {
-            return socket.getInputStream();
-        }
-
-        @Override
-        public OutputStream getOutputStream() throws IOException {
-            return socket.getOutputStream();
-        }
-
-        @Override
-        public String getRemoteDeviceName() {
-            return socket.getRemoteDevice().getName();
-        }
-
-        @Override
-        public void connect() throws IOException {
-            socket.connect();
-        }
-
-        @Override
-        public String getRemoteDeviceAddress() {
-            return socket.getRemoteDevice().getAddress();
-        }
-
-        @Override
-        public void close() throws IOException {
-            socket.close();
-        }
-
-        @Override
-        public BluetoothSocket getUnderlyingSocket() {
-            return socket;
-        }
-
-    }
 
     public class FallbackBluetoothSocket extends NativeBluetoothSocket {
 

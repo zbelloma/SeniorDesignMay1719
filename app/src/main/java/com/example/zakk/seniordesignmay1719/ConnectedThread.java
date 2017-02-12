@@ -11,11 +11,12 @@ import java.io.OutputStream;
  */
 
 public class ConnectedThread extends Thread {
-    public BluetoothSocket mmSocket;
+    public BluetoothSocketWrapper mmSocket;
     public InputStream inStream;
     public OutputStream outStream;
+    private android.util.Log Log;
 
-    public ConnectedThread(BluetoothSocket socket){
+    public ConnectedThread(BluetoothSocketWrapper socket){
         mmSocket = socket;
         InputStream in = null;
         OutputStream out = null;
@@ -36,6 +37,13 @@ public class ConnectedThread extends Thread {
     }
 
     public void run(){
-
+        byte[] sendComm = "S".getBytes();
+        
+        try {
+            outStream.write(sendComm);
+        }catch (IOException e){
+            Log.e("OUT", "Could not write out. " + e.getMessage());
+            
+        }
     }
 }

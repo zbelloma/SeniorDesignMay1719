@@ -21,9 +21,18 @@ public class Data {
         this.pixels = output_to_pixels(this.data);
     }
 
+    public Data(){
+        this.data = data;
+        this.time = time;
+        this.id = "" + this.time;
+        this.pixels = output_to_pixels(this.data);
+    }
 
     private String[] output_to_pixels(String input){
         //input = input.replace("\n", "");
+        if(input == null || input.equals("")){
+            return null;
+        }
         String[] output_Data = input.split(" ");
 
         String data_Mode = output_Data[2]; //0-WORDS (16-bit pixel values), 1-DWORDS (32-bit pixel values)

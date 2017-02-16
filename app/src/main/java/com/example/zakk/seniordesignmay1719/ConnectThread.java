@@ -60,10 +60,13 @@ public class ConnectThread{
                     break;
                 } catch (FallbackException e1) {
                     Log.w("BT", "Could not initialize FallbackBluetoothSocket classes.", e);
+                    break;
                 } catch (InterruptedException e1) {
                     Log.w("BT", e1.getMessage(), e1);
+                    break;
                 } catch (IOException e1) {
                     Log.w("BT", "Fallback failed. Cancelling.", e1);
+                    break;
                 }
             }
         }

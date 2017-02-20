@@ -8,45 +8,74 @@ public class Data {
     public String data;
     public long time;
     public String id;
+    public int numScans;
+    public int integrationTime;
+    public int baselineMSB;
+    public int baselineLSB;
+    public String[] pixels;
 
     public Data(String data, long time){
         this.data = data;
         this.time = time;
         this.id = "" + this.time;
+        this.pixels = output_to_pixels(this.data);
     }
 
     public Data(){
-
+        this.data = data;
+        this.time = time;
+        this.id = "" + this.time;
+        this.pixels = output_to_pixels(this.data);
     }
 
-
-    public static String[] output_to_pixels(String input){
+    private String[] output_to_pixels(String input){
         //input = input.replace("\n", "");
+        if(input == null || input.equals("")){
+            return null;
+        }
         String[] output_Data = input.split(" ");
 
         String data_Mode = output_Data[2]; //0-WORDS (16-bit pixel values), 1-DWORDS (32-bit pixel values)
-        //String scans = output_Data[3]; //Number of scans taken
-        //String integration_Time = output_Data[4]; //Time taken to obtain sample data
-        String pixels[] = new String[(output_Data.length-9)/2];
+        this.numScans = Integer.parseInt(output_Data[3]); //Number of scans taken
+        this.integrationTime = Integer.parseInt(output_Data[4]); //Time taken to obtain sample data
+        this.baselineMSB = Integer.parseInt(output_Data[5]);
+        this.baselineLSB = Integer.parseInt(output_Data[6]);
+
+        String parse_Pixels[] = new String[(output_Data.length-9)/2];
         Integer pixel_Index = 0;
 
         if(data_Mode.equals("0")){
             for(int i = 8; i < output_Data.length-2; i += 2){
-                pixels[pixel_Index] = output_Data[i+1] + output_Data[i];
+                parse_Pixels[pixel_Index] = output_Data[i+1] + output_Data[i];
                 pixel_Index++;
             }
         } else {
             for(int i = 8; i < output_Data.length; i+=4){
-                pixels[pixel_Index] = output_Data[i+3] + output_Data[i+2] + output_Data[i+1] + output_Data[i];
+                parse_Pixels[pixel_Index] = output_Data[i+3] + output_Data[i+2] + output_Data[i+1] + output_Data[i];
                 pixel_Index++;
             }
         }
 
-        return pixels;
+        return parse_Pixels;
     }
 
     @Override
     public String toString(){
         return this.data;
     }
+
+    //Returns the number of scans taken in one run
+    public int getNumScans(){ return this.numScans; }
+
+    //Returns the integration time of the run (How long the scan took to complete)
+    public int getIntegrationTime(){return this.integrationTime;}
+
+    //Returns the baseline value for the MSB
+    public int getBaselineMSB(){return this.baselineMSB;}
+
+    //Returns the baseline value for the LSB
+    public int getBaselineLSB(){return this.baselineLSB;}
+
+    //Returns the array of pixels received from the scan
+    public String[] getPixels(){return this.pixels;}
 }

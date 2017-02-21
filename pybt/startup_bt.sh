@@ -1,3 +1,3 @@
 #!/bin/bash
-python blueagent5.py &
-python server2.py &
+sudo python blueagent5.py &
+sudo python server2.py &

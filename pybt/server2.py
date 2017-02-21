@@ -54,6 +54,10 @@ while True:
                                 print type(lastData)
                         print "\n\n" + data
 			client_sock.send(data)
+ thing
+ 1 file changed, 2 deletions(-)
+pybt ➤ git push                                                     git:master*
+Counting objects: 4, done.
 
 	except IOError:
 		pass

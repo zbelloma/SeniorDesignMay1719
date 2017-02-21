@@ -57,11 +57,9 @@ while True:
 
 	except IOError:
 		pass
-=======
     try:
         data = client_sock.recv(1024)
         response = "Received scan command"
->>>>>>> a1b1e1599889d5fa74accf8947bd42ae4bffd0ab
 
         if len(data) == 0: break
         print "received [%s]" % data

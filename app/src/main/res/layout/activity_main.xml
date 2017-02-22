@@ -10,40 +10,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.zakk.seniordesignmay1719.MainActivity">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/bluetoohLV"
-        android:background="@android:drawable/alert_light_frame"
-        android:layout_below="@+id/db_button" />
-
-    <Button
-        android:text="DB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/db_button"
-        android:layout_below="@+id/startScanButton"
-        android:layout_alignLeft="@+id/startScanButton"
-        android:layout_alignStart="@+id/startScanButton"
-        android:onClick="dbview" />
-
-    <Button
-        android:text="Scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/startScanButton"
-        android:onClick="bluetoothScan"
-        android:layout_below="@+id/enableButton"
-        android:layout_alignLeft="@+id/enableButton"
-        android:layout_alignStart="@+id/enableButton" />
-
     <Button
         android:text="Enable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/enableButton"
         android:onClick="enableBluetooth"
+        android:layout_marginTop="99dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:elevation="0dp" />
+
+    <Button
+        android:text="DB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/db_button"
+        android:onClick="dbview"
+        android:layout_marginTop="111dp"
+        android:layout_below="@+id/enableButton"
+        android:layout_alignLeft="@+id/enableButton"
+        android:layout_alignStart="@+id/enableButton" />
 </RelativeLayout>

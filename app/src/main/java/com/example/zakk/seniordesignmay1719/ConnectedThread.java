@@ -39,23 +39,24 @@ public class ConnectedThread extends Thread {
 
     public String scan(){
         byte[] sendComm = "S".getBytes();
-        byte[] recvData = new byte[2048];
+        byte[] recvData;
         String recv = "";
         try {
-            while(this.mmSocket.getUnderlyingSocket().isConnected()){
+            if(this.mmSocket.getUnderlyingSocket().isConnected()){
                 outStream.write(sendComm);
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(4000);
                 } catch(InterruptedException time){
                     Log.e("Sleep", "Sleep was interrupeted? : " + time.getMessage());
                 }
                 dataAvailable = inStream.available();
                 if (dataAvailable == 0){
                     Log.i("READ", "No data was sent back.");
-                    break;
+                    //break; do something else here
                 } else {
-
+                    recvData = new byte[inStream.available()];
                     inStream.read(recvData);
+
                     recv = new String(recvData);
                     Log.i("Read", "This is the received data: " + recv);
                 }

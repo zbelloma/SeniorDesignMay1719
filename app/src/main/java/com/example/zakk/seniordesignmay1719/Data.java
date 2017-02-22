@@ -13,6 +13,8 @@ public class Data {
     public int baselineMSB;
     public int baselineLSB;
     public String[] pixels;
+    public double[] pixel_Intensity;
+    final double saturation_Level = 2608;
 
     public Data(String data, long time){
         this.data = data;
@@ -47,11 +49,13 @@ public class Data {
         if(data_Mode.equals("0")){
             for(int i = 8; i < output_Data.length-2; i += 2){
                 parse_Pixels[pixel_Index] = output_Data[i+1] + output_Data[i];
+                pixel_Intensity[pixel_Index] = (65535.0/saturation_Level) * Double.parseDouble(parse_Pixels[pixel_Index]);
                 pixel_Index++;
             }
         } else {
             for(int i = 8; i < output_Data.length; i+=4){
                 parse_Pixels[pixel_Index] = output_Data[i+3] + output_Data[i+2] + output_Data[i+1] + output_Data[i];
+                pixel_Intensity[pixel_Index] = (65535.0/saturation_Level) * Double.parseDouble(parse_Pixels[pixel_Index]);
                 pixel_Index++;
             }
         }

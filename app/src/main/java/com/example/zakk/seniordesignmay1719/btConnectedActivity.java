@@ -34,17 +34,19 @@ public class btConnectedActivity extends AppCompatActivity {
 
         try{
             mConnected = mConnectThread.connect();
+            this.mOut = new ConnectedThread(mConnected); //Starts the bluetooth connection thread
         } catch(IOException e){
             Log.e("CONNECT", "Connection error: " + e.getMessage());
         }
 
-        this.mOut = new ConnectedThread(mConnected); //Starts the bluetooth connection thread
+
     }
 
     public void run(View view){
         response = this.mOut.scan();
+        Log.i("Data", response);
         //Create data
-        Data entry = new Data(response, System.currentTimeMillis());
+        //Data entry = new Data(response, System.currentTimeMillis());
     }
 
     public void goDB(View view){

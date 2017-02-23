@@ -30,13 +30,15 @@
         android:visibility="visible"
         android:onClick="run" />
 
-    <EditText
+    <Button
+        android:text="Back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_marginTop="59dp"
-        android:id="@+id/scanComplete"
-        android:layout_below="@+id/db_BTN"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/db_BTN"
+        android:layout_alignStart="@+id/db_BTN"
+        android:layout_marginBottom="35dp"
+        android:id="@+id/backBtn"
+        android:onClick="goBack" />
+
 </RelativeLayout>

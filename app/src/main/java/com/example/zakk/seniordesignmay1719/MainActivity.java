@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
     BluetoothLeScanner testScanner;
     int REQUEST_ENABLE_BT = 1;
     Set<BluetoothDevice> pairedDevices;
-    List<String> listViewData = new ArrayList<String>();
-    List<BluetoothDevice> deviceList = new ArrayList<>();
-    ListView lv;
+    //List<String> listViewData = new ArrayList<String>();
+    //List<BluetoothDevice> deviceList = new ArrayList<>();
+    //ListView lv;
     ArrayAdapter<String> arrAdapter;
 
 
@@ -50,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        lv = (ListView)findViewById(R.id.bluetoohLV);
-        arrAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewData);
-        lv.setAdapter(arrAdapter);
+        //lv = (ListView)findViewById(R.id.bluetoohLV);
+        //arrAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewData);
+        //lv.setAdapter(arrAdapter);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
+/*        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position,
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("LIST", "Pos in List: " + position);
                 listItemClick(deviceList.get(position));
             }
-        });
+        });*/
 
         int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
             String action = intent.getAction();
             if(BluetoothDevice.ACTION_FOUND.equals(action)){
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                arrAdapter.add(device.getName() + "\n" + device.getAddress()); //may need to move this
-                deviceList.add(device);
+                //arrAdapter.add(device.getName() + "\n" + device.getAddress()); //may need to move this
+                //deviceList.add(device);
                 Log.v(" ", "DEVICE FOUND");
             }
         }
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void enableBluetooth(View view){
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        arrAdapter.clear();
+        //arrAdapter.clear();
         if(mBluetoothAdapter == null){
             Log.e(" ", "bluetooth adapter not enabled");
         }
@@ -118,13 +118,17 @@ public class MainActivity extends AppCompatActivity {
             sendBroadcast(enableBtIntent);
         }
 
-        pairedDevices = mBluetoothAdapter.getBondedDevices();
+        /*pairedDevices = mBluetoothAdapter.getBondedDevices();
         if(pairedDevices.size() > 0){
             for(BluetoothDevice device : pairedDevices){
-                arrAdapter.add(device.getName() + "/n" + device.getAddress());
-                deviceList.add(device);
+                //arrAdapter.add(device.getName() + "/n" + device.getAddress());
+                //deviceList.add(device);
             }
-        }
+        }*/
+
+        Intent btConnected = new Intent(this, btConnectedActivity.class);
+        //btConnected.putExtra("connectedSocket", mOut);
+        startActivity(btConnected);
     }
 
     public void bluetoothScan(View view){
@@ -149,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i("BLUETOOTH", "val: " + mBluetoothAdapter.isDiscovering()); // Return false
 
 
+
     }
 
     public void listItemClick(BluetoothDevice device){
@@ -168,9 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
         //mOut = new ConnectedThread(mConnected); //Starts the bluetooth connection thread
 
-        Intent btConnected = new Intent(this, btConnectedActivity.class);
-        //btConnected.putExtra("connectedSocket", mOut);
-        startActivity(btConnected);
+
         //mOut = tmp;
         //mOut.run();
 

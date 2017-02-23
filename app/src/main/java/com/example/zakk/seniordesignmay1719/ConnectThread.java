@@ -49,6 +49,7 @@ public class ConnectThread{
             try {
                 mmSocket.connect();
                 success = true;
+                Log.i("connection", "Connection complete.");
                 break;
             } catch (IOException e) {
                 //try the fallback
@@ -56,10 +57,12 @@ public class ConnectThread{
                     mmSocket = new FallbackBluetoothSocket(mmSocket.getUnderlyingSocket());
                     Thread.sleep(500);
                     mmSocket.connect();
+                    Log.i("connection", "Connection complete.");
                     success = true;
                     break;
                 } catch (FallbackException e1) {
                     Log.w("BT", "Could not initialize FallbackBluetoothSocket classes.", e);
+
                     break;
                 } catch (InterruptedException e1) {
                     Log.w("BT", e1.getMessage(), e1);

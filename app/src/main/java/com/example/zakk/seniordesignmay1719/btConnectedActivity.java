@@ -20,6 +20,7 @@ public class btConnectedActivity extends AppCompatActivity {
     public String response;
     public Data[] datas = new Data[10];
     public int data_Index = 0;
+    public Data data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class btConnectedActivity extends AppCompatActivity {
 
     public void run(View view){
         response = this.mOut.scan();
-        Log.i("Data", response);
+        //Log.i("Data", response);
         if(response.length() > 100){
             Toast toast = Toast.makeText(this.getApplicationContext(), "Scan Data added to DB", Toast.LENGTH_LONG);
             toast.show();
@@ -56,6 +57,13 @@ public class btConnectedActivity extends AppCompatActivity {
         //datas[data_Index] = new Data(response, System.currentTimeMillis());
         //Figure out how to push the data into the database, for now...
         //data_Index++;
+        data = new Data(response, System.currentTimeMillis());
+        //add to DB here
+
+
+        //String[] pixs = data.getPixels();
+        Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
+
     }
 
     public void goDB(View view){

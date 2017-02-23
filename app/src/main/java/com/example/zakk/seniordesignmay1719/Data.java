@@ -23,12 +23,12 @@ public class Data {
         this.pixels = output_to_pixels(this.data);
     }
 
-    public Data(){
-        this.data = data;
-        this.time = time;
+/*    public Data(){
+        //this.data = data;
+        //this.time = time;
         this.id = "" + this.time;
         this.pixels = output_to_pixels(this.data);
-    }
+    }*/
 
     private String[] output_to_pixels(String input){
         //input = input.replace("\n", "");
@@ -44,18 +44,19 @@ public class Data {
         this.baselineLSB = Integer.parseInt(output_Data[6]);
 
         String parse_Pixels[] = new String[(output_Data.length-9)/2];
+        //this.pixel_Intensity = new Double[(output_Data.length-9)/2];
         Integer pixel_Index = 0;
 
         if(data_Mode.equals("0")){
             for(int i = 8; i < output_Data.length-2; i += 2){
                 parse_Pixels[pixel_Index] = output_Data[i+1] + output_Data[i];
-                pixel_Intensity[pixel_Index] = (65535.0/saturation_Level) * Double.parseDouble(parse_Pixels[pixel_Index]);
+                //pixel_Intensity[pixel_Index] = (65535.0/saturation_Level) * Double.parseDouble(parse_Pixels[pixel_Index]);
                 pixel_Index++;
             }
         } else {
             for(int i = 8; i < output_Data.length; i+=4){
                 parse_Pixels[pixel_Index] = output_Data[i+3] + output_Data[i+2] + output_Data[i+1] + output_Data[i];
-                pixel_Intensity[pixel_Index] = (65535.0/saturation_Level) * Double.parseDouble(parse_Pixels[pixel_Index]);
+                //pixel_Intensity[pixel_Index] = (65535.0/saturation_Level) * Double.parseDouble(parse_Pixels[pixel_Index]);
                 pixel_Index++;
             }
         }

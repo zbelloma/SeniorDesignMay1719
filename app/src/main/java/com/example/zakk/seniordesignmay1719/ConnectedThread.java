@@ -45,7 +45,7 @@ public class ConnectedThread extends Thread {
             if(this.mmSocket.getUnderlyingSocket().isConnected()){
                 outStream.write(sendComm);
                 try {
-                    Thread.sleep(4000);
+                    Thread.sleep(10000);
                 } catch(InterruptedException time){
                     Log.e("Sleep", "Sleep was interrupeted? : " + time.getMessage());
                 }
@@ -58,7 +58,7 @@ public class ConnectedThread extends Thread {
                     inStream.read(recvData);
 
                     recv = new String(recvData);
-                    Log.i("Read", "This is the received data: " + recv);
+
                 }
             }
             //outStream.write(sendComm);

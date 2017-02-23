@@ -72,12 +72,28 @@ public class btConnectedActivity extends AppCompatActivity {
 
     }
 
+
+/*    public void initialize(View view){
+        this.mOut().initialize();
+        try{
+            mConnected.close();
+        } catch (IOException e ){
+            Log.e("Connection close", "Connection could not close for some reason." + e.toString());
+        }
+
+    }*/
+
     public void goDB(View view){
         Intent intent = new Intent(this, DisplayDBActivity.class);
         startActivity(intent);
     }
 
     public void goBack(View view){
+        try{
+            mConnected.close();
+        } catch (IOException e ){
+            Log.e("Connection close", "Connection could not close for some reason." + e.toString());
+        }
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

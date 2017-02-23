@@ -18,7 +18,7 @@ public class Data {
     public int baselineMSB;
     public int baselineLSB;
     public List pixels;
-    public double[] pixel_Intensity;
+    //public double[] pixel_Intensity;
     final double saturation_Level = 2608;
 
     public Data(String data, long time){
@@ -44,6 +44,7 @@ public class Data {
         input = input.substring(start, input.length() -1);
         Log.i("Data", input);
         String[] output_Data = input.split(" ");
+        Log.i("Data", "Data length: " + output_Data.length + "\nLast word: " + output_Data[output_Data.length -1]);
 
         String data_Mode = output_Data[1]; //0-WORDS (16-bit pixel values), 1-DWORDS (32-bit pixel values)
         this.numScans = Integer.parseInt(output_Data[2]); //Number of scans taken
@@ -52,13 +53,13 @@ public class Data {
         //this.baselineLSB = Integer.parseInt(output_Data[5]);
 
         String parse_Pixels[] = new String[(output_Data.length) - 8];
-        //this.pixel_Intensity = new Double[(output_Data.length-9)/2];
+        Double pixel_Intensity[] = new Double[(output_Data.length) - 8];
         Integer pixel_Index = 0;
 
         if(data_Mode.equals("0")){
             for(int i = 8; i < output_Data.length-2; i++){
-                parse_Pixels[i-8] = output_Data[i];
-                //pixel_Intensity[pixel_Index] = (65535.0/saturation_Level) * Double.parseDouble(parse_Pixels[pixel_Index]);
+                //parse_Pixels[i-8] = output_Data[i];
+                pixel_Intensity[i-8] = (65535.0/saturation_Level) * Double.parseDouble(output_Data[i]);
                 //pixel_Index++;
             }
         } else {
@@ -70,7 +71,7 @@ public class Data {
             Log.i("as;df", "Should not be sending back DWORDS");
         }
 
-        return Arrays.asList(parse_Pixels);
+        return Arrays.asList(pixel_Intensity);
     }
 
     @Override

@@ -30,7 +30,7 @@ while True:
         try:
             data = client_sock.recv(1024)
             if len(data) == 0: break
-            print "received [%s]" % data
+            ##print "received [%s]" % data
 
             if "S" in data:
                 specPort.write("S")
@@ -42,9 +42,9 @@ while True:
                     lastByte = specPort.read(2)
                     lastData = struct.unpack(">H", binascii.a2b_hex(binascii.b2a_hex(lastByte)))[0]
                     output += (str(lastData) + " ")
-                print "\n\n" + output
+                ##print "\n\n" + output
                 client_sock.send(output)
-                print "Scan Sent"
+                ##print "Scan Sent"
 
             elif "?x17" in data:
                 sendstring = "\x3F\x78\x00\x11"

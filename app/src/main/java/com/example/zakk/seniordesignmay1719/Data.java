@@ -42,6 +42,7 @@ public class Data {
         }
         int start = input.indexOf("65535");
         input = input.substring(start, input.length() -1);
+        Log.i("Data", input);
         String[] output_Data = input.split(" ");
 
         String data_Mode = output_Data[1]; //0-WORDS (16-bit pixel values), 1-DWORDS (32-bit pixel values)

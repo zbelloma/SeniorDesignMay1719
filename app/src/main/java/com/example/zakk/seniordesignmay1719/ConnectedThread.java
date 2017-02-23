@@ -44,10 +44,16 @@ public class ConnectedThread extends Thread {
         try {
             if(this.mmSocket.getUnderlyingSocket().isConnected()){
                 outStream.write(sendComm);
-                try {
-                    Thread.sleep(10000);
-                } catch(InterruptedException time){
-                    Log.e("Sleep", "Sleep was interrupeted? : " + time.getMessage());
+
+                    //Thread.sleep(10000);
+                    long dif = 0;
+                    long baseTime = System.currentTimeMillis();
+                    while(inStream.available() == 0 || dif <= 10000){
+                        dif = System.currentTimeMillis() - baseTime;
+                    }
+                    if(dif > 10000){
+                        Log.i("Scan_time", "Scan took to long to send back.");
+                    }
                 }
                 dataAvailable = inStream.available();
                 if (dataAvailable == 0){
@@ -60,7 +66,7 @@ public class ConnectedThread extends Thread {
                     recv = new String(recvData);
 
                 }
-            }
+
             //outStream.write(sendComm);
             Log.i("Connection", "Is this still connected? " + this.mmSocket.getUnderlyingSocket().isConnected());
         }catch (IOException e){

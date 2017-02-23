@@ -51,24 +51,24 @@ public class btConnectedActivity extends AppCompatActivity {
 
     public void run(View view){
         response = this.mOut.scan();
-        //Log.i("Data", response);
+
         if(response.length() > 100){
+
+            data = new Data(response, System.currentTimeMillis());
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference();
+            ref.child("data").child(data.id).setValue(data);
+
             Toast toast = Toast.makeText(this.getApplicationContext(), "Scan Data added to DB", Toast.LENGTH_LONG);
             toast.show();
+        } else {
+            Toast toast = Toast.makeText(this.getApplicationContext(), "No Data was returned", Toast.LENGTH_LONG);
+            toast.show();
+
         }
-        //Create data
-        //datas[data_Index] = new Data(response, System.currentTimeMillis());
-        //Figure out how to push the data into the database, for now...
-        //data_Index++;
-
-        data = new Data(response, System.currentTimeMillis());
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference();
-        ref.child("data").child(data.id).setValue(data);
-
 
         //String[] pixs = data.getPixels();
-        Log.i("Display", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
+        Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
 
     }
 

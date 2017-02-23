@@ -45,6 +45,7 @@ public class ConnectedThread extends Thread {
         try {
             if(this.mmSocket.getUnderlyingSocket().isConnected()){
                 outStream.write(sendComm);
+<<<<<<< Updated upstream
                     try {
                         Thread.sleep(10000);
                     } catch(InterruptedException e){
@@ -83,6 +84,26 @@ public class ConnectedThread extends Thread {
                             inStream.read(recvData);
 
                             recv = new String(recvData);
+=======
+
+                    //Thread.sleep(10000);
+                    long dif = 0;
+                    long baseTime = System.currentTimeMillis();
+                    while(inStream.available() == 0 || dif <= 10000){
+                        dif = System.currentTimeMillis() - baseTime;
+                    }
+                    if(dif > 10000){
+                        Log.i("Scan_time", "Scan took to long to send back.");
+                    }
+                }
+                dataAvailable = inStream.available();
+                if (dataAvailable == 0){
+                    Log.i("READ", "No data was sent back.");
+                    //break; do something else here
+                } else {
+                    recvData = new byte[inStream.available()];
+                    inStream.read(recvData);
+>>>>>>> Stashed changes
 
                         }
                     //}
@@ -90,8 +111,12 @@ public class ConnectedThread extends Thread {
 
                 }
 
+<<<<<<< Updated upstream
 
 
+=======
+            //outStream.write(sendComm);
+>>>>>>> Stashed changes
             Log.i("Connection", "Is this still connected? " + this.mmSocket.getUnderlyingSocket().isConnected());
         }catch (IOException e){
             Log.e("OUT", "Could not write out. " + e.getMessage());

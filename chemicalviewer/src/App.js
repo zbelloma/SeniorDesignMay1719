@@ -1,6 +1,8 @@
+import C3Chart from 'react-c3js';
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import 'c3/c3.css';
 import * as firebase from 'firebase';
 
 class App extends Component {
@@ -26,14 +28,20 @@ class App extends Component {
 
   render() {
     var db = this.state.db;
+    var data = {}
+    function addChart(){
+      ReactDOM.render()
+    }
     const listItems = Object.keys(this.state.db).map((v, index) => {
+      data = {
+        columns: [db[v]['pixels'].slice(40, 1000)]
+      }
       return <tr key={index}>
-                <td>{db[v]['id'] || 'N/A'}</td>
-                <td>{db[v]['date'] || 'N/A'}</td>
-                <td>{db[v]['data'] || 'N/A'}</td>
-                <td>{db[v]['location'] || 'N/A'}</td>
+                <td onClick={addChart}>{db[v]['id'] || 'N/A'}</td>
+                <td id={db[v]['id'] + "_chart"}></td>
              </tr>
-           });
+    });
+
     return (
 
       <div className="App hack container">
@@ -44,9 +52,7 @@ class App extends Component {
           <thead>
           <tr>
             <th>Run ID</th>
-            <th>Date Run</th>
-            <th>Data</th>
-            <th>Location</th>
+            <th>Chart</th>
           </tr>
           </thead>
           <tbody>

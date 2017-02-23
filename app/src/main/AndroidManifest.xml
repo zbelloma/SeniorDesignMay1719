@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".DisplayDBActivity" />
-        <activity android:name=".btConnectedActivity"></activity>
+        <activity android:name=".btConnectedActivity" />
+        <activity android:name=".GraphViewActivity"></activity>
     </application>
 
 </manifest>

@@ -182,10 +182,61 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void listItemClick(BluetoothDevice device){
+        /*String raspMAC = "00:1B:DC:0F:AC:3C";
+        device = mBluetoothAdapter.getRemoteDevice(raspMAC);
+        mBluetoothAdapter.cancelDiscovery();
+        ConnectedThread mOut;
+
+        ConnectThread mConnectThread = new ConnectThread(device, false, mBluetoothAdapter);
+
+        try{
+            mConnected = mConnectThread.connect();
+        } catch(IOException e){
+            Log.e("CONNECT", "Connection error: " + e.getMessage());
+        }*/
+
+
+        //mOut = new ConnectedThread(mConnected); //Starts the bluetooth connection thread
+
+
+        //mOut = tmp;
+        //mOut.run();
+
+    }
 
     public void dbview(View view){
         Intent intent = new Intent(this, DisplayDBActivity.class);
         startActivity(intent);
+    }
+
+    public void graphview(View view){
+        Intent intent = new Intent(this, GraphViewActivity.class);
+        startActivity(intent);
+    }
+
+    public void scan(ConnectedThread ctScan){
+
+
+        /*
+        1: check the connection
+            if active
+                send scan command ('S')
+            else
+                error, need to connect to bluetooth device (popup box?)
+
+        2: read from socket
+
+            check the header,
+            if formatted S 65535 ....
+                read until 65533
+                stop read
+                run output_to_pixels
+                send output_to_pixels, along with other data, to the DB
+
+         */
+        //ctScan.run();
+
     }
 
 

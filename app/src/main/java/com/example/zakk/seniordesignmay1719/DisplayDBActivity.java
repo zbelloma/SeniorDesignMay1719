@@ -1,11 +1,18 @@
 package com.example.zakk.seniordesignmay1719;
 
 import android.content.Intent;
+import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
+import java.io.Serializable;
+
+
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DisplayDBActivity extends AppCompatActivity {
+public class DisplayDBActivity extends AppCompatActivity implements Serializable {
 
     ListView lv;
     ArrayAdapter<String> arrAdapter;
@@ -32,15 +39,45 @@ public class DisplayDBActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_db);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference Dataref = database.getReference("/data");
+        final DatabaseReference Dataref = database.getReference("/data");
         lv = (ListView)findViewById(R.id.dbLV);
         arrAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewData);
         lv.setAdapter(arrAdapter);
+
+        lv.setOnItemClickListener( new OnItemClickListener()
+        {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position,
+                                    long id)
+            {
+                Log.e("TEST", "Item clicked: " + position);
+                final String fetched = parent.getItemAtPosition(position).toString();
+                //getAndDisplayData(fetched);
+                ///fetched = "1487866379226"; //temp
+                Dataref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        DataSnapshot temp = dataSnapshot.child(fetched);
+                        Data val = temp.getValue(Data.class);
+                        getAndDisplayData(val);
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        } );
+
         Dataref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 tempViewData.clear();
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren() ) {
                     Data d = postSnapshot.getValue(Data.class);
                     System.out.println(d.toString());
                     if (d.data != null && !listViewData.contains(d.id)) {
@@ -54,7 +91,16 @@ public class DisplayDBActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
             }
+
         });
+
+    }
+
+
+    public void getAndDisplayData(Data value){
+        Intent intent = new Intent(this, GraphViewActivity.class);
+        intent.putExtra("Data", value);
+        startActivity(intent);
     }
 
     public void setData(View view){

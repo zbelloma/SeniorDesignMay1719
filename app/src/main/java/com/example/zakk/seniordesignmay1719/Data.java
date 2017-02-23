@@ -1,6 +1,7 @@
 package com.example.zakk.seniordesignmay1719;
 
 import android.util.Log;
+import java.io.Serializable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  * Created by Rupert on 2/6/2017.
  */
 
-public class Data {
+public class Data implements Serializable{
     public String data;
     public long time;
     public String id;

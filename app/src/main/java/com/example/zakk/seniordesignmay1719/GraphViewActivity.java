@@ -18,6 +18,7 @@ import java.util.*;
 public class GraphViewActivity extends AppCompatActivity {
 
     private XYPlot plot;
+//    Data dataObj = (Data)getIntent().getSerializableExtra("Data");
 
     @Override
     public void onCreate(Bundle savedInstanceState)

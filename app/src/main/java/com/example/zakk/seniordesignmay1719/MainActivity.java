@@ -184,6 +184,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void graphview(View view){
+        Intent intent = new Intent(this, GraphViewActivity.class);
+        startActivity(intent);
+    }
+
     public void scan(ConnectedThread ctScan){
 
 

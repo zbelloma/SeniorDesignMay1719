@@ -1,3 +1,3 @@
 #!/bin/bash
-sudo python blueagent5.py &
-sudo python server2.py &
+sudo python /home/pi/SeniorDesignMay1719/pybt/blueagent5.py &
+sudo python /home/pi/SeniorDesignMay1719/pybt/server2.py >> /home/pi/btlog.txt &

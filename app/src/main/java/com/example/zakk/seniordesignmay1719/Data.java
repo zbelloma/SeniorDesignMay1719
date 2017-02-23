@@ -90,7 +90,7 @@ public class Data {
     public int getBaselineLSB(){return this.baselineLSB;}
 
     //Returns the array of pixels received from the scan
-    public String[] getPixels(){return this.pixels;}
+    public List getPixels(){return this.pixels;}
 
     //Returns the time of the data objects creation
     public long getTime(){return this.time;}

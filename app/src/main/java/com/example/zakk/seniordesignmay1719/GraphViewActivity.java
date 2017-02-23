@@ -30,7 +30,7 @@ public class GraphViewActivity extends AppCompatActivity {
         plot = (XYPlot) findViewById(R.id.plot);
 
         // create a couple arrays of y-values to plot:
-        final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
+        final Number[] domainLabels = {150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100};
         Number[] series1Numbers = {1, 4, 2, 8, 4, 16, 8, 32, 16, 64};
 
         // turn the above arrays into XYSeries':

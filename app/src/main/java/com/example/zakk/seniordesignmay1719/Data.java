@@ -2,6 +2,9 @@ package com.example.zakk.seniordesignmay1719;
 
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Rupert on 2/6/2017.
  */
@@ -14,7 +17,7 @@ public class Data {
     public int integrationTime;
     public int baselineMSB;
     public int baselineLSB;
-    public String[] pixels;
+    public List pixels;
     public double[] pixel_Intensity;
     final double saturation_Level = 2608;
 
@@ -32,7 +35,7 @@ public class Data {
         this.pixels = output_to_pixels(this.data);
     }*/
 
-    private String[] output_to_pixels(String input){
+    private List output_to_pixels(String input){
         //input = input.replace("\n", "");
         if(input == null || input.equals("")){
             return null;
@@ -40,7 +43,7 @@ public class Data {
         int start = input.indexOf("65535");
         input = input.substring(start, input.length() -1);
         String[] output_Data = input.split(" ");
- 
+
         String data_Mode = output_Data[1]; //0-WORDS (16-bit pixel values), 1-DWORDS (32-bit pixel values)
         this.numScans = Integer.parseInt(output_Data[2]); //Number of scans taken
         this.integrationTime = Integer.parseInt(output_Data[3]); //Time taken to obtain sample data
@@ -66,7 +69,7 @@ public class Data {
             Log.i("as;df", "Should not be sending back DWORDS");
         }
 
-        return parse_Pixels;
+        return Arrays.asList(parse_Pixels);
     }
 
     @Override

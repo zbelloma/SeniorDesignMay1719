@@ -37,8 +37,10 @@ public class Data {
         if(input == null || input.equals("")){
             return null;
         }
+        int start = input.indexOf("65535");
+        input = input.substring(start, input.length() -1);
         String[] output_Data = input.split(" ");
-
+ 
         String data_Mode = output_Data[1]; //0-WORDS (16-bit pixel values), 1-DWORDS (32-bit pixel values)
         this.numScans = Integer.parseInt(output_Data[2]); //Number of scans taken
         this.integrationTime = Integer.parseInt(output_Data[3]); //Time taken to obtain sample data

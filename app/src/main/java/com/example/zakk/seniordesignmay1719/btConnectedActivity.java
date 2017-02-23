@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.IOException;
 
 public class btConnectedActivity extends AppCompatActivity {
@@ -57,12 +60,15 @@ public class btConnectedActivity extends AppCompatActivity {
         //datas[data_Index] = new Data(response, System.currentTimeMillis());
         //Figure out how to push the data into the database, for now...
         //data_Index++;
+
         data = new Data(response, System.currentTimeMillis());
-        //add to DB here
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference();
+        ref.child("data").child(data.id).setValue(data);
 
 
         //String[] pixs = data.getPixels();
-        Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
+        Log.i("Display", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
 
     }
 

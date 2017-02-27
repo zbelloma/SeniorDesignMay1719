@@ -6,6 +6,7 @@
     "react-scripts": "0.8.5"
   },
   "dependencies": {
+    "dateformat": "^2.0.0",
     "firebase": "^3.6.9",
     "react": "^15.4.2",
     "react-c3js": "^0.1.16",

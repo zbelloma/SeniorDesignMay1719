@@ -1,4 +1,6 @@
 import C3Chart from 'react-c3js';
+import Collapse, { Panel } from 'rc-collapse';
+import dateFormat from 'dateformat';
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -28,35 +30,43 @@ class App extends Component {
 
   render() {
     var db = this.state.db;
-    var data = {}
-    function addChart(){
-      ReactDOM.render()
-    }
+
     const listItems = Object.keys(this.state.db).map((v, index) => {
-      data = {
-        columns: [db[v]['pixels'].slice(40, 1000)]
+      var data = db[v]['pixels'].slice(40, 3000)
+      for (var i = 0; i < data.length; i += 2){
+        data.splice(i, 1);
       }
+      data.unshift("Scan");
+      data = {
+        columns: [data]
+      }
+      var date = new Date(db[v]['time']);
       return <tr key={index}>
-                <td onClick={addChart}>{db[v]['id'] || 'N/A'}</td>
-                <td id={db[v]['id'] + "_chart"}></td>
+              <td>{dateFormat(date, "m/dd/yy h:MM TT") || 'N/A'}</td>
+              <td>
+                <Collapse accordian={true}>
+                  <Panel header="Chart">
+                    <C3Chart data={data} type={'spline'} point={{show: false}} names={{data1: 'Scan'}} />
+                  </Panel>
+                </Collapse>
+              </td>
              </tr>
     });
 
     return (
-
-      <div className="App hack container">
+      <div className="App hack container" id="main">
         <div className="App-header">
           <h2>Chemical Viewer</h2>
         </div>
         <table className="chem-table">
           <thead>
           <tr>
-            <th>Run ID</th>
+            <th>Run Time</th>
             <th>Chart</th>
           </tr>
           </thead>
           <tbody>
-            {listItems}
+            {listItems.reverse()}
           </tbody>
         </table>
       </div>

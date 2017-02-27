@@ -4,6 +4,6 @@ body {
   font-family: sans-serif;
 }
 
-.container {
+#data-reactroot {
   max-width: 80%
 }

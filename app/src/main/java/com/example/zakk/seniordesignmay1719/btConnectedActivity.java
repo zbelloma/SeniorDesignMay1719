@@ -1,5 +1,6 @@
 package com.example.zakk.seniordesignmay1719;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -50,7 +51,14 @@ public class btConnectedActivity extends AppCompatActivity {
     }
 
     public void run(View view){
+        ProgressDialog dialog = new ProgressDialog(btConnectedActivity.this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage("Loading. Please wait...");
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
         response = this.mOut.scan();
+        dialog.dismiss();
 
         if(response.length() > 100){
 

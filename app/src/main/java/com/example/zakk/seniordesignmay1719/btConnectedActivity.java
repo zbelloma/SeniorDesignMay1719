@@ -60,6 +60,7 @@ public class btConnectedActivity extends AppCompatActivity {
         response = this.mOut.scan();
         dialog.dismiss();
 
+
         if(response.length() > 100){
 
             data = new Data(response, System.currentTimeMillis());
@@ -79,17 +80,6 @@ public class btConnectedActivity extends AppCompatActivity {
         Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
 
     }
-
-
-/*    public void initialize(View view){
-        this.mOut().initialize();
-        try{
-            mConnected.close();
-        } catch (IOException e ){
-            Log.e("Connection close", "Connection could not close for some reason." + e.toString());
-        }
-
-    }*/
 
     public void goDB(View view){
         Intent intent = new Intent(this, DisplayDBActivity.class);

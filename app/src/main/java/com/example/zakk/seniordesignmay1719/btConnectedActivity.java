@@ -8,7 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,14 +25,19 @@ public class btConnectedActivity extends AppCompatActivity {
     public BluetoothDevice device;
     public ConnectedThread mOut;
     public String response;
-    public Data[] datas = new Data[10];
-    public int data_Index = 0;
+    //public Data[] datas = new Data[10];
+    //public int data_Index = 0;
     public Data data;
+    //public ProgressBar spinner;
+    private TextView process;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bt_connected);
+
+        process =(TextView)findViewById(R.id.textView);
+        process.setVisibility(View.GONE);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -51,14 +59,9 @@ public class btConnectedActivity extends AppCompatActivity {
     }
 
     public void run(View view){
-        ProgressDialog dialog = new ProgressDialog(btConnectedActivity.this);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage("Loading. Please wait...");
-        dialog.setIndeterminate(true);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        process.setVisibility(View.VISIBLE);
         response = this.mOut.scan();
-        dialog.dismiss();
+        process.setVisibility(View.GONE);
 
 
         if(response.length() > 100){
@@ -77,7 +80,7 @@ public class btConnectedActivity extends AppCompatActivity {
         }
 
         //String[] pixs = data.getPixels();
-        Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
+        //Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
 
     }
 

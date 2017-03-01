@@ -11,26 +11,6 @@
     tools:context="com.example.zakk.seniordesignmay1719.btConnectedActivity">
 
     <Button
-        android:text="View DB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/runBT"
-        android:layout_alignRight="@+id/runBT"
-        android:layout_alignEnd="@+id/runBT"
-        android:id="@+id/db_BTN"
-        android:onClick="goDB" />
-
-    <Button
-        android:text="Run Scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/runBT"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="visible"
-        android:onClick="run" />
-
-    <Button
         android:text="Back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,5 +20,37 @@
         android:layout_marginBottom="35dp"
         android:id="@+id/backBtn"
         android:onClick="goBack" />
+
+    <Button
+        android:text="View DB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/db_BTN"
+        android:onClick="goDB"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp" />
+
+    <Button
+        android:text="Run Scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/db_BTN"
+        android:layout_alignEnd="@+id/db_BTN"
+        android:id="@+id/button4"
+        android:onClick="run" />
+
+    <TextView
+        android:text="Scanning in progress..."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textSize="35dp"
+        android:layout_marginLeft="82dp"
+        android:layout_marginStart="82dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

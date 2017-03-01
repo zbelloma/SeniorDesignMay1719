@@ -64,7 +64,8 @@ public class ConnectedThread extends Thread {
                     } else {
                         recvData = new byte[inStream.available()];
                         inStream.read(recvData);
-
+                        recv = new String(recvData);
+                        Log.i("Initial", "Data: " + recv);
                     }
 
                 } else {
@@ -85,7 +86,7 @@ public class ConnectedThread extends Thread {
 
                 Log.i("Connection", "Is this still connected? " + this.mmSocket.getUnderlyingSocket().isConnected());
             }
-            //return recv;
+
         } catch (IOException e) {
             Log.e("OUT", "Could not write out: " + e.getMessage());
         }

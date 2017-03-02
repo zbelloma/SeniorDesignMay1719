@@ -30,15 +30,36 @@ class App extends Component {
 
   render() {
     var db = this.state.db;
-
+    function adjustData(data){
+      var newData = new Array(977);
+      var index = 0;
+      for(var j = 30; j < data.length; j += 3){
+        if(j<30){
+          newData[index] = null;
+          index++;
+        } else {
+          newData[index] = data[j];
+          index++;
+        }
+      }
+      newData.unshift("Scan");
+      return newData;
+    }
     const listItems = Object.keys(this.state.db).map((v, index) => {
       var data = db[v]['pixels'].slice(40, 3000)
-      for (var i = 0; i < data.length; i += 2){
-        data.splice(i, 1);
+      var newData = adjustData(data);
+      var chartData = {
+        columns: [newData]
       }
-      data.unshift("Scan");
-      data = {
-        columns: [data]
+      var chartAxis = {
+        x: {
+          label: "Wavelength (nm)",
+          min: 190,
+          max: 1100,
+        },
+        y: {
+          label: "Intensity",
+        }
       }
       var date = new Date(db[v]['time']);
       return <tr key={index}>
@@ -46,12 +67,13 @@ class App extends Component {
               <td>
                 <Collapse accordian={true}>
                   <Panel header="Chart">
-                    <C3Chart data={data} type={'spline'} point={{show: false}} names={{data1: 'Scan'}} />
+                    <C3Chart data={chartData} type={'spline'} point={{show: false}} names={{data1: 'Scan'}} axis={chartAxis} />
                   </Panel>
                 </Collapse>
               </td>
              </tr>
     });
+    console.log(listItems);
 
     return (
       <div className="App hack container" id="main">

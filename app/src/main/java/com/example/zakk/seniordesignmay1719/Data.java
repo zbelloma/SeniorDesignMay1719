@@ -42,7 +42,9 @@ public class Data implements Serializable{
             return null;
         }
         int start = input.indexOf("65535");
-        input = input.substring(start, input.length() -1);
+        if(start > 0){
+            input = input.substring(start, input.length() -1);
+        }
         Log.i("Data", input);
         String[] output_Data = input.split(" ");
         Log.i("Data", "Data length: " + output_Data.length + "\nLast word: " + output_Data[output_Data.length -1]);

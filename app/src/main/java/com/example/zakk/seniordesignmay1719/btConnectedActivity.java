@@ -81,12 +81,12 @@ public class btConnectedActivity extends AppCompatActivity {
         if(response.length() > 18000){
 
 
-/*
+
             data = new Data(response, System.currentTimeMillis());
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference ref = database.getReference();
             ref.child("data").child(data.id).setValue(data);
-*/
+
 
 
             Toast toast = Toast.makeText(this.getApplicationContext(), "Scan Data added to DB", Toast.LENGTH_LONG);
@@ -100,7 +100,7 @@ public class btConnectedActivity extends AppCompatActivity {
         }
 
         //String[] pixs = data.getPixels();
-        //Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
+        Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
 
     }
 

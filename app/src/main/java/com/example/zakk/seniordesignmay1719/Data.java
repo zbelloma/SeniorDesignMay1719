@@ -43,14 +43,14 @@ public class Data implements Serializable{
             return null;
         }
 
-        int startIndex = "65535".indexOf(input);
-        Log.i("Start", " index: " + startIndex);
+        //int startIndex = "65535".indexOf(input);
+        //Log.i("Start", " index: " + startIndex);
 
-        if (startIndex == -1){
+/*        if (startIndex == -1){
             Log.i("Index", "Scan was not received correctly");
             return null;
-        }
-        input = input.substring(startIndex, input.length() - 1);
+        }*/
+        //input = input.substring(startIndex, input.length() - 1);
 
         Log.i("Data", input);
         String[] output_Data = input.split(" ");
@@ -87,7 +87,10 @@ public class Data implements Serializable{
             }*/
             Log.i("as;df", "Should not be sending back DWORDS");
         }
-        this.data = null;
+
+        //this.data = null;
+        Log.i("Data","Data String: " + this.data.toString());
+                Log.i("Data", "Averaged Array: " + averagePixels.length);
         return Arrays.asList(averagePixels);
     }
 

@@ -25,60 +25,62 @@ public class ConnectedThread extends Thread {
 
         try {
             in = socket.getInputStream();
-            inStream = in;
+            this.inStream = in;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
             out = socket.getOutputStream();
-            outStream = out;
+            this.outStream = out;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public String scan() {
+
         byte[] sendComm = "S".getBytes();
         byte[] recvData;
         String recv = "";
         try {
             if (this.mmSocket.getUnderlyingSocket().isConnected()) {
-                outStream.write(sendComm);
-
+                this.outStream.write(sendComm);
                 long dif = 0;
-                long baseTime = System.currentTimeMillis();
-                while (inStream.available() == 0 && dif <= 12000) {
-                    dif = System.currentTimeMillis() - baseTime;
-                }
 
+                try {
+                    Thread.sleep(12000);
+                }catch (InterruptedException e){
+                    Log.i("Sleep", "Sleep interrupted: " +  e.getMessage());
+                }
                 if (dif > 12000) {
                     Log.i("Scan_time", "Scan took to long to complete, over 10 seconds");
                     //Make toast
                     //Toast toast = Toast.makeText(getApplicationContext(), "No Data was returned", Toast.LENGTH_LONG);
                     //toast.show();
-                    dataAvailable = inStream.available();
+                    dataAvailable = this.inStream.available();
                     if (dataAvailable == 0) {
                         Log.i("READ", "No data was sent back.");
                         //break; do something else here
                     } else {
-                        recvData = new byte[inStream.available()];
-                        inStream.read(recvData);
+
+                        recvData = new byte[this.inStream.available()];
+                        //inStream.
+                        this.inStream.read(recvData);
                         recv = new String(recvData);
                         Log.i("Initial", "Data: " + recv);
                     }
 
                 } else {
-                    dataAvailable = inStream.available();
+                    Log.e("Stream_", "Available: " + this.inStream.available());
+                    dataAvailable = this.inStream.available();
                     if (dataAvailable == 0) {
                         Log.i("READ", "No data was sent back.");
                         //break; do something else here
                     } else {
-                        recvData = new byte[inStream.available()];
-                        inStream.read(recvData);
-
+                        recvData = new byte[this.inStream.available()];
+                        this.inStream.read(recvData);
                         recv = new String(recvData);
-
                     }
 
                 }
@@ -92,4 +94,14 @@ public class ConnectedThread extends Thread {
         }
         return recv;
     }
+
+    public void shutdown(){
+        byte[] sendComm = "kill".getBytes();
+        try {
+            this.outStream.write(sendComm);
+        } catch (IOException e){
+            Log.e("Shutdown_Error", e.getMessage());
+        }
+    }
+
 }

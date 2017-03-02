@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
  * Created by Rupert on 2/6/2017.
  */
@@ -16,8 +17,8 @@ public class Data implements Serializable{
     public String id;
     public int numScans;
     public int integrationTime;
-    public int baselineMSB;
-    public int baselineLSB;
+    //public int baselineMSB;
+    //public int baselineLSB;
     public List pixels;
     //public double[] pixel_Intensity;
     final double saturation_Level = 2608;
@@ -41,10 +42,16 @@ public class Data implements Serializable{
         if(input == null || input.equals("")){
             return null;
         }
-        int start = input.indexOf("65535");
-        if(start > 0){
-            input = input.substring(start, input.length() -1);
+
+        int startIndex = "65535".indexOf(input);
+        Log.i("Start", " index: " + startIndex);
+
+        if (startIndex == -1){
+            Log.i("Index", "Scan was not received correctly");
+            return null;
         }
+        input = input.substring(startIndex, input.length() - 1);
+
         Log.i("Data", input);
         String[] output_Data = input.split(" ");
         Log.i("Data", "Data length: " + output_Data.length + "\nLast word: " + output_Data[output_Data.length -1]);
@@ -55,15 +62,22 @@ public class Data implements Serializable{
         //this.baselineMSB = Integer.parseInt(output_Data[4]);
         //this.baselineLSB = Integer.parseInt(output_Data[5]);
 
-        String parse_Pixels[] = new String[(output_Data.length) - 8];
+
         Double pixel_Intensity[] = new Double[(output_Data.length) - 8];
-        Integer pixel_Index = 0;
+        Double averagePixels[] = new Double[pixel_Intensity.length/4];
+        int pixel_Index = 0, averageCount = 0;
 
         if(data_Mode.equals("0")){
-            for(int i = 8; i < output_Data.length-2; i++){
-                //parse_Pixels[i-8] = output_Data[i];
+            for(int i = 8; i < output_Data.length-1; i++){
+
                 pixel_Intensity[i-8] = (65535.0/saturation_Level) * Double.parseDouble(output_Data[i]);
-                //pixel_Index++;
+                averageCount++;
+                if(averageCount == 4){
+                    averagePixels[pixel_Index] = (pixel_Intensity[i-11]+pixel_Intensity[i-10]+pixel_Intensity[i-9]+pixel_Intensity[i-8])/4;
+                    pixel_Index++;
+                    averageCount = 0;
+                }
+
             }
         } else {
             /* for(int i = 7; i < output_Data.length; i++){
@@ -73,8 +87,8 @@ public class Data implements Serializable{
             }*/
             Log.i("as;df", "Should not be sending back DWORDS");
         }
-
-        return Arrays.asList(pixel_Intensity);
+        this.data = null;
+        return Arrays.asList(averagePixels);
     }
 
     @Override
@@ -89,10 +103,10 @@ public class Data implements Serializable{
     public int getIntegrationTime(){return this.integrationTime;}
 
     //Returns the baseline value for the MSB
-    public int getBaselineMSB(){return this.baselineMSB;}
+    //public int getBaselineMSB(){return this.baselineMSB;}
 
     //Returns the baseline value for the LSB
-    public int getBaselineLSB(){return this.baselineLSB;}
+    //public int getBaselineLSB(){return this.baselineLSB;}
 
     //Returns the array of pixels received from the scan
     public List getPixels(){return this.pixels;}

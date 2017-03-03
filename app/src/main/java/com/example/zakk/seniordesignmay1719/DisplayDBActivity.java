@@ -1,6 +1,8 @@
 package com.example.zakk.seniordesignmay1719;
 
 import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,16 +56,16 @@ public class DisplayDBActivity extends AppCompatActivity implements Serializable
             {
                 Log.e("TEST", "Item clicked: " + position);
                 final String fetched = parent.getItemAtPosition(position).toString();
+                //Log.e("TEST", fetched);
                 //getAndDisplayData(fetched);
                 ///fetched = "1487866379226"; //temp
                 Dataref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        DataSnapshot temp = dataSnapshot.child(fetched);
-                        Data val = temp.getValue(Data.class);
-                        getAndDisplayData(val);
-
-
+                        DataSnapshot data = dataSnapshot.child(fetched);
+                        ArrayList<Double> valueToPass = (ArrayList<Double>) data.child("pixels").getValue();
+                        //Log.e("TEST", valueToPass.toString());
+                        getAndDisplayData(valueToPass);
                     }
 
                     @Override
@@ -76,12 +79,18 @@ public class DisplayDBActivity extends AppCompatActivity implements Serializable
         Dataref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("TEST", "IN on DataChage");
                 tempViewData.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren() ) {
-                    Data d = postSnapshot.getValue(Data.class);
-                    System.out.println(d.toString());
-                    if (d.data != null && !listViewData.contains(d.id)) {
-                        listViewData.add(d.id);
+                    Data data = new Data();
+                    data.id = (String) postSnapshot.child("id").getValue();
+                    //Log.e("ID", data.id);
+                    data.pixels = (List<Double>) postSnapshot.child("pixels").getValue();
+//                    Log.e("DATA", data.pixels.toString());
+  //                  System.out.println(data.id);
+                    if (data.pixels != null && !listViewData.contains(data.id)) {
+                        listViewData.add(data.id);
+                        Log.e("LIST", "added");
                     }
                 }
                 arrAdapter.notifyDataSetChanged();
@@ -97,9 +106,16 @@ public class DisplayDBActivity extends AppCompatActivity implements Serializable
     }
 
 
-    public void getAndDisplayData(Data value){
+    public void getAndDisplayData(ArrayList<Double> value){
         Intent intent = new Intent(this, GraphViewActivity.class);
         intent.putExtra("Data", value);
+
+ //       Double[] test = new Double[value.size()];
+ //       for(int i = 0; i < value.size(); i++){
+ //           test[i] = value.get(i);
+ //       }
+
+        //Log.e("Data", valueArray.toString());
         startActivity(intent);
     }
 

@@ -30,12 +30,12 @@ public class Data implements Serializable{
         this.pixels = output_to_pixels(this.data);
     }
 
-/*    public Data(){
+    public Data() {
         //this.data = data;
         //this.time = time;
         this.id = "" + this.time;
         this.pixels = output_to_pixels(this.data);
-    }*/
+    }
 
     private List output_to_pixels(String input){
         //input = input.replace("\n", "");

@@ -14,31 +14,55 @@
         android:text="View DB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/runBT"
-        android:layout_alignRight="@+id/runBT"
-        android:layout_alignEnd="@+id/runBT"
         android:id="@+id/db_BTN"
-        android:onClick="goDB" />
+        android:onClick="goDB"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp" />
 
     <Button
         android:text="Run Scan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/runBT"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="visible"
+        android:layout_alignRight="@+id/db_BTN"
+        android:layout_alignEnd="@+id/db_BTN"
+        android:id="@+id/runBTN"
         android:onClick="run" />
+
+    <TextView
+        android:text="Scanning in progress..."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_marginLeft="82dp"
+        android:layout_marginStart="82dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
     <Button
         android:text="Back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:id="@+id/backBtn"
+        android:onClick="goBack"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/db_BTN"
-        android:layout_alignStart="@+id/db_BTN"
-        android:layout_marginBottom="35dp"
-        android:id="@+id/backBtn"
-        android:onClick="goBack" />
+        android:layout_alignStart="@+id/db_BTN" />
+
+    <Button
+        android:text="Shutdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="21dp"
+        android:id="@+id/shutdown"
+        android:onClick="shutdown"
+        android:layout_above="@+id/backBtn"
+        android:layout_alignLeft="@+id/backBtn"
+        android:layout_alignStart="@+id/backBtn" />
 
 </RelativeLayout>

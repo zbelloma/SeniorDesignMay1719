@@ -76,6 +76,7 @@ public class ConnectThread{
 
         if (!success) {
             throw new IOException("Could not connect to device: " + mmDevice.getAddress());
+
         }
 
         return mmSocket;

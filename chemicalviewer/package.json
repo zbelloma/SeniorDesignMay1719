@@ -6,8 +6,12 @@
     "react-scripts": "0.8.5"
   },
   "dependencies": {
+    "dateformat": "^2.0.0",
     "firebase": "^3.6.9",
+    "hack": "^0.7.7",
+    "rc-collapse": "^1.6.12",
     "react": "^15.4.2",
+    "react-c3js": "^0.1.16",
     "react-dom": "^15.4.2"
   },
   "scripts": {

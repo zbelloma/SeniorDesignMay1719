@@ -131,6 +131,32 @@ public class MainActivity extends AppCompatActivity {
         startActivity(btConnected);
     }
 
+/*    public void initialize(View view){
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        //arrAdapter.clear();
+        if(mBluetoothAdapter == null){
+            Log.e(" ", "bluetooth adapter not enabled");
+        }
+        if(!mBluetoothAdapter.isEnabled()){
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            sendBroadcast(enableBtIntent);
+        }
+
+        *//*pairedDevices = mBluetoothAdapter.getBondedDevices();
+        if(pairedDevices.size() > 0){
+            for(BluetoothDevice device : pairedDevices){
+                //arrAdapter.add(device.getName() + "/n" + device.getAddress());
+                //deviceList.add(device);
+            }
+        }*//*
+
+        Intent btConnected = new Intent(this, btConnectedActivity.class);
+        //btConnected.putExtra("connectedSocket", mOut);
+        startActivity(btConnected);
+    }*/
+
+
     public void bluetoothScan(View view){
 
         if(mBluetoothAdapter.isDiscovering()){
@@ -181,6 +207,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void dbview(View view){
         Intent intent = new Intent(this, DisplayDBActivity.class);
+        startActivity(intent);
+    }
+
+    public void graphview(View view){
+        Intent intent = new Intent(this, GraphViewActivity.class);
         startActivity(intent);
     }
 

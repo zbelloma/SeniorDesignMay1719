@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,12 +28,23 @@ public class btConnectedActivity extends AppCompatActivity {
     public BluetoothDevice device;
     public ConnectedThread mOut;
     public String response;
-    //public Data[] datas = new Data[10];
-    //public int data_Index = 0;
     public Data data;
+    public boolean acknowledged;
     //public ProgressBar spinner;
     private TextView process;
     private Button runBTN;
+    private ImageButton settingsBTN;
+    private Button db_BTN;
+    private Button shutdownBTN;
+    private Button backBTN;
+    private Button integrationBTN;
+    private Button wavelengthBTN;
+    private Button settingsBackBTN;
+    private EditText integrationTime;
+    private EditText wavelengthStart;
+    private EditText wavelengthEnd;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +52,7 @@ public class btConnectedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bt_connected);
 
         this.process =(TextView)findViewById(R.id.textView);
-        //this.process.setVisibility(View.GONE);
+        this.process.setVisibility(View.GONE);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -58,6 +71,18 @@ public class btConnectedActivity extends AppCompatActivity {
         }
 
         runBTN = (Button)findViewById(R.id.runBTN);
+        settingsBTN = (ImageButton)findViewById(R.id.settingsBTN);
+        db_BTN = (Button)findViewById(R.id.db_BTN);
+        shutdownBTN = (Button)findViewById(R.id.shutdownBTN);
+        backBTN = (Button)findViewById(R.id.backBtn);
+
+        integrationBTN = (Button)findViewById(R.id.integrationBTN);
+        integrationTime = (EditText)findViewById(R.id.integrationTime);
+        wavelengthBTN = (Button)findViewById(R.id.wavelengthBTN);
+        wavelengthStart = (EditText)findViewById(R.id.wavelengthStart);
+        wavelengthEnd = (EditText)findViewById(R.id.wavelengthEnd);
+        settingsBackBTN = (Button)findViewById(R.id.settingsBackBTN);
+
         runBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,28 +91,75 @@ public class btConnectedActivity extends AppCompatActivity {
                 process.setVisibility(View.GONE);
             }
         });
+
+
+        settingsBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                //Make normal buttons gone
+                runBTN.setVisibility(View.GONE);
+                db_BTN.setVisibility(View.GONE);
+                shutdownBTN.setVisibility(View.GONE);
+                backBTN.setVisibility(View.GONE);
+
+                integrationBTN.setVisibility(View.VISIBLE);
+                integrationTime.setVisibility(View.VISIBLE);
+                wavelengthBTN.setVisibility(View.VISIBLE);
+                wavelengthStart.setVisibility(View.VISIBLE);
+                wavelengthEnd.setVisibility(View.VISIBLE);
+
+            }
+
+        });
+        settingsBackBTN.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //Make normal buttons gone
+                runBTN.setVisibility(View.VISIBLE);
+                db_BTN.setVisibility(View.VISIBLE);
+                shutdownBTN.setVisibility(View.VISIBLE);
+                backBTN.setVisibility(View.VISIBLE);
+
+                integrationBTN.setVisibility(View.GONE);
+                integrationTime.setVisibility(View.GONE);
+                wavelengthBTN.setVisibility(View.GONE);
+                wavelengthStart.setVisibility(View.GONE);
+                wavelengthEnd.setVisibility(View.GONE);
+
+            }
+        });
+
+        integrationBTN.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //Run integration communication here
+                String integration = integrationTime.getText().toString();
+                setIntegrationTime(integration);
+            }
+        });
+
+        wavelengthBTN.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //Run partial pixel command here
+                String start = wavelengthStart.getText().toString();
+                String end = wavelengthEnd.getText().toString();
+
+            }
+        });
     }
 
     public void run() {
         response = "";
-        //this.process.setVisibility(View.VISIBLE);
-        //Thread.sleep(1000);
+
         this.response = this.mOut.scan();
 
-
-        //process.setVisibility(View.GONE);
-
-
         if(response.length() > 18000){
-
-
 
             data = new Data(response, System.currentTimeMillis());
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference ref = database.getReference();
             ref.child("data").child(data.id).setValue(data);
-
-
 
             Toast toast = Toast.makeText(this.getApplicationContext(), "Scan Data added to DB", Toast.LENGTH_LONG);
             toast.show();
@@ -99,10 +171,22 @@ public class btConnectedActivity extends AppCompatActivity {
             toast.show();
         }
 
-        //String[] pixs = data.getPixels();
         Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
 
     }
+
+    public void setIntegrationTime(String time){
+
+        this.acknowledged = this.mOut.integrationTime(Short.parseShort(time));
+        if(this.acknowledged){
+            Toast toast = Toast.makeText(this.getApplicationContext(), "Integration time set to: " + time, Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            Toast toast = Toast.makeText(this.getApplicationContext(), "Integration time not set.", Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
+
 
     public void goDB(View view){
         Intent intent = new Intent(this, DisplayDBActivity.class);

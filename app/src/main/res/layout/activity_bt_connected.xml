@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_bt_connected"
     android:layout_width="match_parent"
@@ -59,10 +60,104 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="21dp"
-        android:id="@+id/shutdown"
+        android:id="@+id/shutdownBTN"
         android:onClick="shutdown"
         android:layout_above="@+id/backBtn"
         android:layout_alignLeft="@+id/backBtn"
         android:layout_alignStart="@+id/backBtn" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_info_details"
+        android:id="@+id/settingsBTN"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="goSettings (btConnectedActivity)"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:text="Set Integration Time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/integrationBTN"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Enter integration time"
+            android:ems="10"
+            android:id="@+id/integrationTime"
+            android:layout_below="@+id/integrationBTN"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"/>
+
+        <Button
+            android:text="Set Wavelength Range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wavelengthBTN"
+            android:layout_marginTop="176dp"
+            android:layout_below="@+id/integrationBTN"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Start Wavelength"
+            android:ems="10"
+            android:layout_marginBottom="186dp"
+            android:id="@+id/wavelengthStart"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="End Wavelength"
+            android:ems="10"
+            android:id="@+id/wavelengthEnd"
+            android:layout_alignTop="@+id/wavelengthStart"
+            android:layout_alignLeft="@+id/wavelengthStart"
+            android:layout_alignStart="@+id/wavelengthStart"
+            android:layout_marginTop="38dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:text="Update Device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/updateBTN"
+            android:layout_marginBottom="64dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
+
+        <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/settingsBackBTN"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="36dp"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </RelativeLayout>

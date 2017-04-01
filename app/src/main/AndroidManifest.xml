@@ -22,7 +22,8 @@
         </activity>
         <activity android:name=".DisplayDBActivity" />
         <activity android:name=".btConnectedActivity" />
-        <activity android:name=".GraphViewActivity"></activity>
+        <activity android:name=".GraphViewActivity" />
+        <activity android:name=".activity_settings"></activity>
     </application>
 
 </manifest>

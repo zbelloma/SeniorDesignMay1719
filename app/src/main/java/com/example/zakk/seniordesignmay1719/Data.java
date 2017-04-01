@@ -21,7 +21,7 @@ public class Data implements Serializable{
     //public int baselineLSB;
     public List pixels;
     //public double[] pixel_Intensity;
-    final double saturation_Level = 2608;
+    final double saturation_Level = 26080;
 
     public Data(String data, long time){
         this.data = data;
@@ -48,7 +48,7 @@ public class Data implements Serializable{
 
 /*        if (startIndex == -1){
             Log.i("Index", "Scan was not received correctly");
-            return null;
+       git pull     return null;
         }*/
         //input = input.substring(startIndex, input.length() - 1);
 

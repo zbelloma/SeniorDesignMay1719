@@ -76,6 +76,12 @@ public class btConnectedActivity extends AppCompatActivity {
         shutdownBTN = (Button)findViewById(R.id.shutdownBTN);
         backBTN = (Button)findViewById(R.id.backBtn);
 
+        runBTN.setVisibility(View.VISIBLE);
+        db_BTN.setVisibility(View.VISIBLE);
+        shutdownBTN.setVisibility(View.VISIBLE);
+        backBTN.setVisibility(View.VISIBLE);
+        settingsBTN.setVisibility(View.VISIBLE);
+
         integrationBTN = (Button)findViewById(R.id.integrationBTN);
         integrationTime = (EditText)findViewById(R.id.integrationTime);
         wavelengthBTN = (Button)findViewById(R.id.wavelengthBTN);
@@ -83,12 +89,19 @@ public class btConnectedActivity extends AppCompatActivity {
         wavelengthEnd = (EditText)findViewById(R.id.wavelengthEnd);
         settingsBackBTN = (Button)findViewById(R.id.settingsBackBTN);
 
+        integrationBTN.setVisibility(View.GONE);
+        integrationTime.setVisibility(View.GONE);
+        wavelengthBTN.setVisibility(View.GONE);
+        wavelengthStart.setVisibility(View.GONE);
+        wavelengthEnd.setVisibility(View.GONE);
+        settingsBackBTN.setVisibility(View.GONE);
+
         runBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                process.setVisibility(View.VISIBLE);
+                //process.setVisibility(View.VISIBLE);
                 run();
-                process.setVisibility(View.GONE);
+                //process.setVisibility(View.GONE);
             }
         });
 
@@ -101,12 +114,14 @@ public class btConnectedActivity extends AppCompatActivity {
                 db_BTN.setVisibility(View.GONE);
                 shutdownBTN.setVisibility(View.GONE);
                 backBTN.setVisibility(View.GONE);
+                settingsBTN.setVisibility(View.GONE);
 
                 integrationBTN.setVisibility(View.VISIBLE);
                 integrationTime.setVisibility(View.VISIBLE);
                 wavelengthBTN.setVisibility(View.VISIBLE);
                 wavelengthStart.setVisibility(View.VISIBLE);
                 wavelengthEnd.setVisibility(View.VISIBLE);
+                settingsBackBTN.setVisibility(View.VISIBLE);
 
             }
 
@@ -119,13 +134,14 @@ public class btConnectedActivity extends AppCompatActivity {
                 db_BTN.setVisibility(View.VISIBLE);
                 shutdownBTN.setVisibility(View.VISIBLE);
                 backBTN.setVisibility(View.VISIBLE);
+                settingsBTN.setVisibility(View.VISIBLE);
 
                 integrationBTN.setVisibility(View.GONE);
                 integrationTime.setVisibility(View.GONE);
                 wavelengthBTN.setVisibility(View.GONE);
                 wavelengthStart.setVisibility(View.GONE);
                 wavelengthEnd.setVisibility(View.GONE);
-
+                settingsBackBTN.setVisibility(View.GONE);
             }
         });
 

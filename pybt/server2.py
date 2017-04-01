@@ -14,6 +14,7 @@ RPIO.setmode(RPIO.BOARD)
 RPIO.setup(16,RPIO.OUT, initial=RPIO.LOW) ##Ready
 RPIO.setup(18,RPIO.OUT, initial=RPIO.LOW) ##Scanning
 RPIO.setup(22,RPIO.OUT, initial=RPIO.LOW) ##Connected
+RPIO.setup(7,RPIO.OUT, initial=RPIO.LOW) ##Chinese Taser
 
 server_sock = BluetoothSocket(RFCOMM)
 server_sock.bind(("", PORT_ANY))
@@ -59,6 +60,32 @@ while True:
                 client_sock.send(output)
                 ##print "Scan Sent"
                 RPIO.output(18,RPIO.LOW) ##Unlight 'Scanning' LED
+
+            elif "Spark" in data:
+                #trigger chinese taser
+                RPIO.output(18,RPIO.HIGH)
+                RPIO.output(7,RPIO.HIGH) ##Zap
+                time.sleep(0.5)
+                RPIO.output(7,RPIO.LOW) ##Safe
+                RPIO.output(18,RPIO.LOW)
+
+            elif "I" in data:
+                #might need modification
+                specPort.write(data)
+                lastByte = None
+                #LastData = None
+                #output = ""
+                lastByte = specPort.read(1)
+
+                if lastByte == 0x06:
+
+                    client_sock.send("ACK")
+                elif lastByte == 0x15:
+                    client_sock.send("NAK")
+                else:
+                    client_sock.send("NAK")
+
+            #elif "P" in data:
 
             elif "?x17" in data:
                 sendstring = "\x3F\x78\x00\x11"

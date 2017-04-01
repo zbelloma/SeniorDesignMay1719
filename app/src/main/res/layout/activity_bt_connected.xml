@@ -12,16 +12,6 @@
     tools:context="com.example.zakk.seniordesignmay1719.btConnectedActivity">
 
     <Button
-        android:text="View DB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/db_BTN"
-        android:onClick="goDB"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp" />
-
-    <Button
         android:text="Run Scan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +19,19 @@
         android:layout_alignRight="@+id/db_BTN"
         android:layout_alignEnd="@+id/db_BTN"
         android:id="@+id/runBTN"
-        android:onClick="run" />
+        android:onClick="run"
+        android:visibility="gone" />
+
+    <Button
+        android:text="View DB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/db_BTN"
+        android:onClick="goDB"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp"
+        android:visibility="gone" />
 
     <TextView
         android:text="Scanning in progress..."
@@ -45,17 +47,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
     <Button
-        android:text="Back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
-        android:id="@+id/backBtn"
-        android:onClick="goBack"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/db_BTN"
-        android:layout_alignStart="@+id/db_BTN" />
-
-    <Button
         android:text="Shutdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,7 +55,20 @@
         android:onClick="shutdown"
         android:layout_above="@+id/backBtn"
         android:layout_alignLeft="@+id/backBtn"
-        android:layout_alignStart="@+id/backBtn" />
+        android:layout_alignStart="@+id/backBtn"
+        android:visibility="gone" />
+
+    <Button
+        android:text="Back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:id="@+id/backBtn"
+        android:onClick="goBack"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/db_BTN"
+        android:layout_alignStart="@+id/db_BTN"
+        android:visibility="gone" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -75,89 +79,71 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="goSettings (btConnectedActivity)"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
 
-        <Button
-            android:text="Set Integration Time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/integrationBTN"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone" />
+    <Button
+        android:text="Set Integration Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/integrationBTN"
+        android:visibility="visible"
+        android:layout_below="@+id/shutdownBTN"
+        android:layout_centerHorizontal="true" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Enter integration time"
-            android:ems="10"
-            android:id="@+id/integrationTime"
-            android:layout_below="@+id/integrationBTN"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Enter integration time"
+        android:ems="10"
+        android:id="@+id/integrationTime"
+        android:visibility="visible"
+        android:layout_below="@+id/integrationBTN"
+        android:layout_centerHorizontal="true" />
 
-        <Button
+    <Button
             android:text="Set Wavelength Range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/wavelengthBTN"
-            android:layout_marginTop="176dp"
-            android:layout_below="@+id/integrationBTN"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone" />
+            android:layout_marginTop="45dp"
+        android:visibility="visible"
+        android:layout_below="@+id/integrationTime"
+        android:layout_centerHorizontal="true" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Start Wavelength"
-            android:ems="10"
-            android:layout_marginBottom="186dp"
-            android:id="@+id/wavelengthStart"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Start Wavelength"
+        android:ems="10"
+        android:id="@+id/wavelengthStart"
+        android:visibility="visible"
+        android:layout_below="@+id/wavelengthBTN"
+        android:layout_alignLeft="@+id/integrationTime"
+        android:layout_alignStart="@+id/integrationTime" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="End Wavelength"
-            android:ems="10"
-            android:id="@+id/wavelengthEnd"
-            android:layout_alignTop="@+id/wavelengthStart"
-            android:layout_alignLeft="@+id/wavelengthStart"
-            android:layout_alignStart="@+id/wavelengthStart"
-            android:layout_marginTop="38dp"
-            android:visibility="gone"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="End Wavelength"
+        android:ems="10"
+        android:id="@+id/wavelengthEnd"
+        android:visibility="visible"
+        android:layout_below="@+id/wavelengthStart"
+        android:layout_alignLeft="@+id/wavelengthStart"
+        android:layout_alignStart="@+id/wavelengthStart" />
 
-        <Button
-            android:text="Update Device"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/updateBTN"
-            android:layout_marginBottom="64dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone" />
-
-        <Button
-            android:text="Button"
+    <Button
+            android:text="Back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/settingsBackBTN"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="36dp"
-            android:visibility="gone" />
-    </RelativeLayout>
+            android:visibility="visible" />
 
 </RelativeLayout>

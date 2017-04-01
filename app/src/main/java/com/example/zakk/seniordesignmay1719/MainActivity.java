@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     //List<BluetoothDevice> deviceList = new ArrayList<>();
     //ListView lv;
     ArrayAdapter<String> arrAdapter;
+    private Button connectBTN;
 
 
     @Override
@@ -69,6 +71,15 @@ public class MainActivity extends AppCompatActivity {
         int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION); //testing for android 6.0
+
+        connectBTN = (Button)findViewById(R.id.enableButton);
+        connectBTN.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                enableBluetooth(v);
+            }
+
+        });
     }
 
     @Override

@@ -92,7 +92,8 @@ public class ConnectedThread extends Thread {
             byte[] sendComm = command.getBytes();
             String recv = "";
 
-            recv = communication(sendComm, 1000);
+            recv = communication(sendComm, 200);
+
             if (recv.equals("ACK")) {
                 return true;
             } else if (recv.equals("NAK")) {

@@ -61,7 +61,7 @@ while True:
                 ##print "Scan Sent"
                 RPIO.output(18,RPIO.LOW) ##Unlight 'Scanning' LED
 
-            elif "Spark" in data:
+            elif "zap" in data:
                 #trigger chinese taser
                 RPIO.output(18,RPIO.HIGH)
                 RPIO.output(7,RPIO.HIGH) ##Zap

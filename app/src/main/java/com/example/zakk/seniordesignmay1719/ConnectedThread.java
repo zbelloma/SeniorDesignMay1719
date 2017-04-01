@@ -133,15 +133,21 @@ public class ConnectedThread extends Thread {
      */
     //TODO sending multiple commands
     public boolean partialPixelMode(int x, int y){
-        String firstCommand = "P3";
+        String firstCommand = "zap";
         byte[] sendComm1 = firstCommand.getBytes();
-        byte[] sendComm2 = (Integer.toString(x)).getBytes();
-        byte[] sendComm3 = (Integer.toString(y)).getBytes();
-        byte[] sendComm4 = (Integer.toString(3648)).getBytes();
+        //byte[] sendComm2 = (Integer.toString(x)).getBytes();
+        //byte[] sendComm3 = (Integer.toString(y)).getBytes();
+        //byte[] sendComm4 = (Integer.toString(3648)).getBytes();
         //byte[] recvData;
-        String received = "";
-
-        return false;
+        String recv = "";
+        try {
+            this.outStream.write(sendComm1);
+            return true;
+        } catch (IOException e){
+            Log.e("Shutdown_Error", e.getMessage());
+            return false;
+        }
+        //return false;
     }
 
     /**

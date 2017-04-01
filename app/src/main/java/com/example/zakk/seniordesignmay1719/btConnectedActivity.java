@@ -158,9 +158,9 @@ public class btConnectedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 //Run partial pixel command here
-                String start = wavelengthStart.getText().toString();
-                String end = wavelengthEnd.getText().toString();
-
+                //String start = wavelengthStart.getText().toString();
+                //String end = wavelengthEnd.getText().toString();
+                spark();
             }
         });
     }
@@ -199,6 +199,17 @@ public class btConnectedActivity extends AppCompatActivity {
             toast.show();
         } else {
             Toast toast = Toast.makeText(this.getApplicationContext(), "Integration time not set.", Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
+
+    public void spark(){
+        this.acknowledged = this.mOut.partialPixelMode(0,1000);
+        if(this.acknowledged){
+            Toast toast = Toast.makeText(this.getApplicationContext(), "Tased", Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            Toast toast = Toast.makeText(this.getApplicationContext(), "Not Tased", Toast.LENGTH_LONG);
             toast.show();
         }
     }

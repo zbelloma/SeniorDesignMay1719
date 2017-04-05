@@ -187,7 +187,7 @@ public class btConnectedActivity extends AppCompatActivity {
             toast.show();
         }
 
-        Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
+        //Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
 
     }
 

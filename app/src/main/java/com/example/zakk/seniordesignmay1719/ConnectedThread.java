@@ -55,7 +55,7 @@ public class ConnectedThread extends Thread {
         String recv = "";
 
         //Call communication method
-        recv = communication(sendComm, 12000);
+        recv = communication(sendComm, 30000);
 
         if(recv.equals(null)){
             Log.i("Scan","Scan did not perform properly");
@@ -178,7 +178,7 @@ public class ConnectedThread extends Thread {
                 if (dataAvailable == 0) {
                     Log.i("READ", "No data was sent back.");
                     //break; do something else here
-                    recv = null;
+                    recv = "";
                 } else {
                     recvData = new byte[this.inStream.available()];
                     this.inStream.read(recvData);

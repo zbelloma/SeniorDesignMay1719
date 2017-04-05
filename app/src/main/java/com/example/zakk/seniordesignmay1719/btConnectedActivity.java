@@ -68,6 +68,12 @@ public class btConnectedActivity extends AppCompatActivity {
             this.mOut = new ConnectedThread(mConnected); //Starts the bluetooth connection thread
         } catch(IOException e){
             Log.e("CONNECT", "Connection error: " + e.getMessage());
+            Toast toast = Toast.makeText(this.getApplicationContext(), "Unable to connect to device.", Toast.LENGTH_LONG);
+            toast.show();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+
+
         }
 
         runBTN = (Button)findViewById(R.id.runBTN);
@@ -150,7 +156,11 @@ public class btConnectedActivity extends AppCompatActivity {
             public void onClick(View v){
                 //Run integration communication here
                 String integration = integrationTime.getText().toString();
-                setIntegrationTime(integration);
+                if(!"".equals(integration)) {
+                    setIntegrationTime(integration);
+                } else {
+
+                }
             }
         });
 
@@ -163,6 +173,14 @@ public class btConnectedActivity extends AppCompatActivity {
                 spark();
             }
         });
+
+/*        integrationTime.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                integrationTime.setText("");
+                //integrationTime.se
+            }
+        });*/
     }
 
     public void run() {
@@ -173,9 +191,9 @@ public class btConnectedActivity extends AppCompatActivity {
         if(response.length() > 18000){
 
             data = new Data(response, System.currentTimeMillis());
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference ref = database.getReference();
-            ref.child("data").child(data.id).setValue(data);
+            //final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            //DatabaseReference ref = database.getReference();
+            //ref.child("data").child(data.id).setValue(data);
 
             Toast toast = Toast.makeText(this.getApplicationContext(), "Scan Data added to DB", Toast.LENGTH_LONG);
             toast.show();
@@ -193,12 +211,18 @@ public class btConnectedActivity extends AppCompatActivity {
 
     public void setIntegrationTime(String time){
 
-        this.acknowledged = this.mOut.integrationTime(Short.parseShort(time));
-        if(this.acknowledged){
-            Toast toast = Toast.makeText(this.getApplicationContext(), "Integration time set to: " + time, Toast.LENGTH_LONG);
-            toast.show();
+        if(!time.equals("")) {
+            //int intTime = Integer.parseInt(time);
+            this.acknowledged = this.mOut.integrationTime(Integer.parseInt(time));
+            if (this.acknowledged) {
+                Toast toast = Toast.makeText(this.getApplicationContext(), "Integration time set to: " + time, Toast.LENGTH_LONG);
+                toast.show();
+            } else {
+                Toast toast = Toast.makeText(this.getApplicationContext(), "Integration time not set.", Toast.LENGTH_LONG);
+                toast.show();
+            }
         } else {
-            Toast toast = Toast.makeText(this.getApplicationContext(), "Integration time not set.", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this.getApplicationContext(), "Please enter a valid integer.", Toast.LENGTH_LONG);
             toast.show();
         }
     }
@@ -226,11 +250,19 @@ public class btConnectedActivity extends AppCompatActivity {
 
     public void goBack(View view){
         try{
-            mConnected.close();
+            if(mConnected != null) {
+                mConnected.close();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
         } catch (IOException e ){
             Log.e("Connection close", "Connection could not close for some reason." + e.toString());
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+
     }
 }

@@ -57,7 +57,7 @@ public class ConnectedThread extends Thread {
         //Call communication method
         recv = communication(sendComm, 30000);
 
-        if(recv.equals(null)){
+        if(recv == null || "".equals(recv)){
             Log.i("Scan","Scan did not perform properly");
             return recv;
         } else {
@@ -84,7 +84,7 @@ public class ConnectedThread extends Thread {
      * @param time - new integration time in milliseconds.
      * @return boolean - wheter the command was successful or not
      */
-    public boolean integrationTime(short time){
+    public boolean integrationTime(int time){
         //Send I{time}
         if(time > 0 && time < 65001) {
             String command = "I" + time;
@@ -92,12 +92,17 @@ public class ConnectedThread extends Thread {
             byte[] sendComm = command.getBytes();
             String recv = "";
 
-            recv = communication(sendComm, 200);
-
-            if (recv.equals("ACK")) {
-                return true;
-            } else if (recv.equals("NAK")) {
-                return false;
+            recv = communication(sendComm, 100);
+            if(recv != null){
+                if (recv == ""){
+                 return false;
+                } else if (recv.equals("ACK")) {
+                 return true;
+                } else if (recv.equals("NAK")) {
+                 return false;
+                } else {
+                 return false;
+                }
             } else {
                 return false;
             }

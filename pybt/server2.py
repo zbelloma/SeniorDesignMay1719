@@ -54,9 +54,10 @@ while True:
                 while lastData != 65533:
                     lastByte = specPort.read(2)
                     lastData = struct.unpack(">H", binascii.a2b_hex(binascii.b2a_hex(lastByte)))[0]
+                    print lastData
                     output += (str(lastData) + " ")
-                print "\n\n" + output + "\n"
-                print len(output)
+                ##print "\n\n" + output + "\n"
+                #print len(output)
                 client_sock.send(output)
                 ##print "Scan Sent"
                 RPIO.output(18,RPIO.LOW) ##Unlight 'Scanning' LED
@@ -65,7 +66,7 @@ while True:
                 #trigger chinese taser
                 RPIO.output(18,RPIO.HIGH)
                 RPIO.output(7,RPIO.HIGH) ##Zap
-                time.sleep(0.5)
+                time.sleep(1)
                 RPIO.output(7,RPIO.LOW) ##Safe
                 RPIO.output(18,RPIO.LOW)
 
@@ -73,16 +74,19 @@ while True:
                 #might need modification
                 specPort.write(data)
                 lastByte = None
-                #LastData = None
+                LastData = None
                 #output = ""
                 lastByte = specPort.read(1)
-
-                if lastByte == 0x06:
-
+                ##print lastByte
+                
+                if lastByte == '\x06':
+                    print "Acknowledged"
                     client_sock.send("ACK")
-                elif lastByte == 0x15:
+                elif lastByte == '\x15':
+                    print "NAK"
                     client_sock.send("NAK")
                 else:
+                    print "Bad return"
                     client_sock.send("NAK")
 
             #elif "P" in data:

@@ -1,0 +1,34 @@
+import os
+import glob
+import time
+from subprocess import call
+
+import serial
+import binascii
+import struct
+import RPIO
+
+specPort = serial.Serial("/dev/ttyAMA0", baudrate=9600, parity=serial.PARITY_NONE)
+
+command = "K6"
+specPort.write(command)
+returnByte=specPort.read(1)
+
+if returnByte == "\0x06":
+    time.sleep(0.1)
+    ##Close old serial port
+    specPort.close()
+    ##Create new serial port with faster baudrate
+    newSpecPort = serial.Serial("/dev/ttsAMA0", baudrate=115200, parity=serial.PARITY_NONE)
+    
+    
+    newSpecPort.write(command)
+    returnByte=newSpecPort.read(1)
+    if returnByte == "\0x06":
+        NewSpecPort
+
+elif returnByte == "\0x15":
+    ##Do something here...
+
+
+

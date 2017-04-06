@@ -63,7 +63,7 @@ while True:
                 RPIO.output(18,RPIO.LOW) ##Unlight 'Scanning' LED
 
             elif "zap" in data:
-                #trigger chinese taser
+                #trigger voltage booster
                 RPIO.output(18,RPIO.HIGH)
                 RPIO.output(7,RPIO.HIGH) ##Zap
                 time.sleep(1)

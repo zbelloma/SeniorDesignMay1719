@@ -55,9 +55,9 @@ public class ConnectedThread extends Thread {
         String recv = "";
 
         //Call communication method
-        recv = communication(sendComm, 12000);
+        recv = communication(sendComm, 30000);
 
-        if(recv.equals(null)){
+        if(recv == null || "".equals(recv)){
             Log.i("Scan","Scan did not perform properly");
             return recv;
         } else {
@@ -84,7 +84,7 @@ public class ConnectedThread extends Thread {
      * @param time - new integration time in milliseconds.
      * @return boolean - wheter the command was successful or not
      */
-    public boolean integrationTime(short time){
+    public boolean integrationTime(int time){
         //Send I{time}
         if(time > 0 && time < 65001) {
             String command = "I" + time;
@@ -92,12 +92,17 @@ public class ConnectedThread extends Thread {
             byte[] sendComm = command.getBytes();
             String recv = "";
 
-            recv = communication(sendComm, 200);
-
-            if (recv.equals("ACK")) {
-                return true;
-            } else if (recv.equals("NAK")) {
-                return false;
+            recv = communication(sendComm, 100);
+            if(recv != null){
+                if (recv == ""){
+                 return false;
+                } else if (recv.equals("ACK")) {
+                 return true;
+                } else if (recv.equals("NAK")) {
+                 return false;
+                } else {
+                 return false;
+                }
             } else {
                 return false;
             }
@@ -178,7 +183,7 @@ public class ConnectedThread extends Thread {
                 if (dataAvailable == 0) {
                     Log.i("READ", "No data was sent back.");
                     //break; do something else here
-                    recv = null;
+                    recv = "";
                 } else {
                     recvData = new byte[this.inStream.available()];
                     this.inStream.read(recvData);

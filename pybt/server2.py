@@ -132,6 +132,7 @@ while True:
 
             client_sock.close()
             server_sock.close()
+            specPort.close()
             print "all done"
             RPIO.output(16,RPIO.LOW) ##Unlight 'Ready' LED
             RPIO.output(18,RPIO.LOW) ##Unlight 'Scanning' LED
@@ -142,4 +143,5 @@ while True:
     print "connection dropped"
     RPIO.output(22,RPIO.LOW) ##Unlight 'Connected' LED
     client_sock.close()
-
+    
+RPIO.output(16,RPIO.LOW) ##Unlight the ready light

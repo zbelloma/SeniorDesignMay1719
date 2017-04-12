@@ -17,12 +17,14 @@ specPort = serial.Serial("/dev/ttyAMA0", baudrate=9600, parity=serial.PARITY_NON
 ## to the value associated with the desired baudrate.
 ## (The values for command are listed above in the form of "K1","K2",...)
 
-command = "K6"
+command = "\x6B\x36"
+    
 specPort.write(command)
+time.sleep(0.05)
 returnByte=specPort.read(1)
 print returnByte
 
-if returnByte == "\0x06":
+if returnByte == "\x06":
 
     #Program needs to wait longer than 50 milliseconds for the spectrometer to change baudrates
     time.sleep(0.1)
@@ -31,7 +33,7 @@ if returnByte == "\0x06":
     specPort.close()
     specPort=None
 
-    ##Create new serial port with faster baudrate
+    ##Create new serial port with new baudrate
     if command == "K1":
         print "New baudrate of 2400"
         newSpecPort = serial.Serial("/dev/ttyAMA0", baudrate=2400, parity=serial.PARITY_NONE)
@@ -47,20 +49,22 @@ if returnByte == "\0x06":
     elif command == "K6":
         print "New baudrate of 115200"
         newSpecPort = serial.Serial("/dev/ttyAMA0", baudrate=115200, parity=serial.PARITY_NONE)
-    
-    ##Send the command again at the new baudrate
-    newSpecPort.write(command)
-    ##receive the ACK or NAK at the new baudrate
-    returnByte=newSpecPort.read(1)
-    print returnByte
-    
-    if returnByte == "\0x06":
+            
+        ##Send the command again at the new baudrate
+        newSpecPort.write(command)
+        ##receive the ACK or NAK at the new baudrate
         returnByte=newSpecPort.read(1)
-    elif returnByte == "\0x15":
-        print "Something went wrong."
+        print returnByte
+    
+        if returnByte == "\x06":
+            returnByte=newSpecPort.read(1)
+            print "Baudrate changed"
+        
+        elif returnByte == "\x15":
+            print "Something went wrong."
 
-elif returnByte == "\0x15":
+elif returnByte == "\x15":
     ##Do something here...
-
-
-
+    specPort.close()
+    specPort = None
+    print "Baudrate did not change"

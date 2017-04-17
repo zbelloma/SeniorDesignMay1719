@@ -10,54 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.zakk.seniordesignmay1719.MainActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="0px"
-            android:layout_weight="0.5">
-
-            <Button
-                android:text="Connect"
-                android:layout_width="0px"
-                android:layout_height="fill_parent"
-                android:id="@+id/enableButton"
-                android:onClick="enableBluetooth (MainActivity)"
-                android:layout_weight="0.5" />
-
-            <Button
-                android:text="DB"
-                android:layout_width="0px"
-                android:layout_height="fill_parent"
-                android:id="@+id/db_button"
-                android:onClick="dbview"
-                android:layout_weight="0.5" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="0px"
-            android:layout_weight="0.5">
-
-            <Button
-                android:text="Tutorial"
-                android:layout_width="0px"
-                android:layout_height="fill_parent"
-                android:id="@+id/tutorial"
-                android:onClick="beginTutorial"
-                android:layout_weight="0.5" />
-            <Button
-                android:text="History"
-                android:layout_width="0px"
-                android:layout_height="fill_parent"
-                android:id="@+id/history"
-                android:layout_weight="0.5" />
-        </LinearLayout>
-    </LinearLayout>
 
 </RelativeLayout>

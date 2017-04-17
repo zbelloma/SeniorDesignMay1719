@@ -2,6 +2,7 @@ package com.example.zakk.seniordesignmay1719;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -14,16 +15,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.AndroidException;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,12 +38,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
+import static android.R.id.button1;
+
 public class MainActivity extends AppCompatActivity {
 
     BluetoothAdapter mBluetoothAdapter;
     BluetoothSocketWrapper mConnected;
     BluetoothLeScanner testScanner;
     int REQUEST_ENABLE_BT = 1;
+    int SHOWCASE_ID = 0;
     Set<BluetoothDevice> pairedDevices;
     //List<String> listViewData = new ArrayList<String>();
     //List<BluetoothDevice> deviceList = new ArrayList<>();
@@ -169,6 +180,23 @@ public class MainActivity extends AppCompatActivity {
     public void graphview(View view){
         Intent intent = new Intent(this, GraphViewActivity.class);
         startActivity(intent);
+    }
+
+    public void beginTutorial(View view){
+        Button button1 = (Button) findViewById(R.id.tutorial);
+        Button button2 = (Button) findViewById(R.id.db_button);
+        Button button3 = (Button) findViewById(R.id.enableButton);
+       // new MaterialShowcaseView.Builder(this).setTarget(button1).setDismissText("DISMISS").setContentText("This button starts the tutorial, but you already know that").show();
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500);
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this , "ID");
+        sequence.setConfig(config);
+        sequence.addSequenceItem(button1, "This button starts the tutorial, but you already know that", "Got It!");
+        sequence.addSequenceItem(button3, "This button will start a connection to the Raspberry Pi", "Got It!");
+        sequence.addSequenceItem(button2, "This button will go to the database", "Got It!");
+
+        sequence.start();
+
     }
 
 }

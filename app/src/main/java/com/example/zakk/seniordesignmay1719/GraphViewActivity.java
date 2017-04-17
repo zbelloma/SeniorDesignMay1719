@@ -38,8 +38,10 @@ public class GraphViewActivity extends AppCompatActivity {
         }
 
         final Number[] xAxisVals = new Number[arr.length];
-        for(int i = 0; i < xAxisVals.length; i++){
-            xAxisVals[i] = i * .75;
+        xAxisVals[0] = 300;
+        for(int i = 1; i < xAxisVals.length; i++){
+            Double temp = xAxisVals[i-1].doubleValue() + .75;
+            xAxisVals[i] = temp;
             Log.e("TEST", xAxisVals[i].toString());
         }
 
@@ -63,7 +65,10 @@ public class GraphViewActivity extends AppCompatActivity {
         series1Format.setPointLabelFormatter(null);
         series1Format.setVertexPaint(null);
         //plot.setLinesPerRangeLabel(3);
+        
         plot.setLinesPerDomainLabel(10);
+        //plot.setRangeBoundaries(0, 1000, BoundaryMode.FIXED);
+        //plot.setDomainBoundaries(350, 1000, BoundaryMode.FIXED);
         PanZoom.attach(plot);
 
         // add a new series' to the xyplot:
@@ -72,7 +77,8 @@ public class GraphViewActivity extends AppCompatActivity {
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
             @Override
             public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-                int i = Math.round(((Number) obj).floatValue());
+                double i = Math.round(((Number) obj).floatValue());
+                i = i * 0.75; //test this in a second
 
                 return toAppendTo.append(i);
             }

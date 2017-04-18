@@ -1,188 +1,191 @@
 package com.example.zakk.seniordesignmay1719;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import com.example.zakk.seniordesignmay1719.NativeBluetoothSocket;
-import com.example.zakk.seniordesignmay1719.BluetoothSocketWrapper;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.graphics.Point;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+
+import android.support.annotation.NonNull;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AndroidException;
+
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.EditText;
+
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
-import static android.R.id.button1;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    BluetoothAdapter mBluetoothAdapter;
-    BluetoothSocketWrapper mConnected;
-    BluetoothLeScanner testScanner;
-    int REQUEST_ENABLE_BT = 1;
-    int SHOWCASE_ID = 0;
-    Set<BluetoothDevice> pairedDevices;
-    //List<String> listViewData = new ArrayList<String>();
-    //List<BluetoothDevice> deviceList = new ArrayList<>();
-    //ListView lv;
-    ArrayAdapter<String> arrAdapter;
-    private Button connectBTN;
+
+
+
+    private static final String TAG = "Login";
+    private FirebaseAuth authentication;
+    private FirebaseAuth.AuthStateListener authListener;
+
+    private Button signInBtn;
+    private Button registerBtn;
+    private EditText email;
+    private EditText password;
+    private ProgressBar progress;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //lv = (ListView)findViewById(R.id.bluetoohLV);
-        //arrAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewData);
-        //lv.setAdapter(arrAdapter);
 
-/*        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        authentication = FirebaseAuth.getInstance();
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
+        progress = (ProgressBar) findViewById(R.id.progressBar);
+
+          //State changing for user signed in and out...
+        authListener = new FirebaseAuth.AuthStateListener(){
             @Override
-            public void onItemClick(AdapterView<?> adapter, View v, int position,
-                                    long arg3)
-            {
-                String value = (String)adapter.getItemAtPosition(position);
-                Log.e("LIST", "Pos in List: " + position);
-                listItemClick(deviceList.get(position));
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if(user != null) {
+                    //User successfully signed in.
+                    Log.i(TAG, "Successful sign in: " + user.getUid());
+                    Intent connected = new Intent(MainActivity.this, activity_settings.class);
+                    connected.putExtra("USER_ID", user.getUid());
+                    startActivity(connected);
+                } else {
+                    //User signed out
+                    Log.i(TAG, "User: " + user.getEmail() + " signed out");
+                }
+
             }
-        });*/
+        };
 
-        int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-               MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION); //testing for android 6.0
-
-        connectBTN = (Button)findViewById(R.id.enableButton);
-        connectBTN.setOnClickListener(new View.OnClickListener(){
+        signInBtn = (Button)findViewById(R.id.signIn);
+        signInBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                enableBluetooth(v);
+                if(email.getText().toString() == ""){
+                    Log.i("Email", "Enter email.");
+                    Toast toast = Toast.makeText(v.getContext(), "Must enter an email.", Toast.LENGTH_LONG);
+                    toast.show();
+                } else if(password.getText().toString() == "" || password.getText().toString() == null){
+                    Log.i("Password", "Enter password.");
+                    Toast toast = Toast.makeText(v.getContext(), "Must enter a password.", Toast.LENGTH_LONG);
+                    toast.show();
+                } else {
+                    Log.i("Login: ", "Attempting login.");
+                    progress.setVisibility(View.VISIBLE);
+                    attemptSignIn(email.getText().toString(), password.getText().toString());
+                }
             }
 
         });
+
+        registerBtn = (Button) findViewById(R.id.register);
+        registerBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(email.getText().toString() == null || email.getText().toString() == ""){
+                    Toast toast = Toast.makeText(v.getContext(), "Must enter an email.", Toast.LENGTH_LONG);
+                    toast.show();
+                } else if(password.getText().toString() == "" || password.getText().toString() == null){
+                    Toast toast = Toast.makeText(v.getContext(), "Must enter a password.", Toast.LENGTH_LONG);
+                    toast.show();
+                } else {
+                    progress.setVisibility(View.VISIBLE);
+
+                    registerUser(email.getText().toString(), password.getText().toString());
+                }
+            }
+
+        });
+
     }
 
     @Override
-    protected void onPause(){
-        super.onPause();
-     //   mBluetoothAdapter.cancelDiscovery();
-        try{
-            if(mReciever != null){
-                unregisterReceiver(mReciever);
-            }
-        }catch (IllegalArgumentException e){
-            Log.e(" ", e.getMessage());
+    public void onStart(){
+        super.onStart();
+        authentication.addAuthStateListener(authListener);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(authListener != null){
+            authentication.removeAuthStateListener(authListener);
+        }
+    }
+
+    private void attemptSignIn(String email, String password){
+
+        if(!validate(email)){
+            progress.setVisibility(View.INVISIBLE);
+            Toast toast = Toast.makeText(this.getApplicationContext(), "Please enter a valid email.", Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+
+            authentication.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(!task.isSuccessful()){
+                                //Login did not work
+                                progress.setVisibility(View.INVISIBLE);
+                                Toast toast = Toast.makeText(MainActivity.this.getApplicationContext(), "Unsuccessful login.", Toast.LENGTH_LONG);
+                                toast.show();
+                                //If the login was successful, the AuthStateChanged will handle the work
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void registerUser(String email, String password){
+        if(!validate(email)){
+            progress.setVisibility(View.INVISIBLE);
+            Toast toast = Toast.makeText(this.getApplicationContext(), "Please enter a valid email.", Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            authentication.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>(){
+                       @Override
+                       public void onComplete(@NonNull Task<AuthResult> task){
+                           if(!task.isSuccessful()){
+                               Toast toast = Toast.makeText(MainActivity.this.getApplicationContext(), "Registration failed.", Toast.LENGTH_LONG);
+                               toast.show();
+                           }
+                       }
+                    });
+        }
+
+    }
+
+
+    private boolean validate(String email){
+        if(email.contains("@")){
+            return true;
+        } else {
+            return false;
         }
     }
 
 
-    private BroadcastReceiver mReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if(BluetoothDevice.ACTION_FOUND.equals(action)){
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                //arrAdapter.add(device.getName() + "\n" + device.getAddress()); //may need to move this
-                //deviceList.add(device);
-                Log.v(" ", "DEVICE FOUND");
-            }
-        }
-    };
 
-    public void enableBluetooth(View view){
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        //arrAdapter.clear();
-        if(mBluetoothAdapter == null){
-            Log.e(" ", "bluetooth adapter not enabled");
-        }
-        if(!mBluetoothAdapter.isEnabled()){
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            sendBroadcast(enableBtIntent);
-        }
-
-        /*pairedDevices = mBluetoothAdapter.getBondedDevices();
-        if(pairedDevices.size() > 0){
-            for(BluetoothDevice device : pairedDevices){
-                //arrAdapter.add(device.getName() + "/n" + device.getAddress());
-                //deviceList.add(device);
-            }
-        }*/
-
-        Intent btConnected = new Intent(this, btConnectedActivity.class);
-        //btConnected.putExtra("connectedSocket", mOut);
-        startActivity(btConnected);
-    }
-
-
-
-    public void bluetoothScan(View view){
-
-        if(mBluetoothAdapter.isDiscovering()){
-            Log.e(" ", "discovery in progress. and you canceled the in progress one");
-            mBluetoothAdapter.cancelDiscovery();
-        }
-
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        this.registerReceiver(mReciever, filter);
-
-        if(mBluetoothAdapter.isDiscovering()){
-            mBluetoothAdapter.cancelDiscovery();
-        }
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            mBluetoothAdapter.startDiscovery();
-        }
-
-        Log.i("BLUETOOTH", String.valueOf(mBluetoothAdapter.getState()));
-        Log.i("BLUETOOTH", "Bluetooth Enabled: " + mBluetoothAdapter.isEnabled());
-        Log.i("BLUETOOTH", "val: " + mBluetoothAdapter.isDiscovering()); // Return false
-
-
-
-    }
-
-    public void dbview(View view){
-        Intent intent = new Intent(this, DisplayDBActivity.class);
-        startActivity(intent);
-    }
-
-    public void graphview(View view){
-        Intent intent = new Intent(this, GraphViewActivity.class);
-        startActivity(intent);
-    }
-
-    public void beginTutorial(View view){
+/*    public void beginTutorial(View view){
         Button button1 = (Button) findViewById(R.id.tutorial);
         Button button2 = (Button) findViewById(R.id.db_button);
         Button button3 = (Button) findViewById(R.id.enableButton);
@@ -197,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
         sequence.start();
 
-    }
+    }*/
 
 }
 

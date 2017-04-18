@@ -14,7 +14,7 @@ RPIO.setmode(RPIO.BOARD)
 RPIO.setup(16,RPIO.OUT, initial=RPIO.LOW) ##Ready
 RPIO.setup(18,RPIO.OUT, initial=RPIO.LOW) ##Scanning
 RPIO.setup(22,RPIO.OUT, initial=RPIO.LOW) ##Connected
-RPIO.setup(7,RPIO.OUT, initial=RPIO.LOW) ##Voltage Booster Taser
+RPIO.setup(7,RPIO.OUT, initial=RPIO.LOW) ##Chinese Taser
 
 server_sock = BluetoothSocket(RFCOMM)
 server_sock.bind(("", PORT_ANY))
@@ -54,10 +54,9 @@ while True:
                 while lastData != 65533:
                     lastByte = specPort.read(2)
                     lastData = struct.unpack(">H", binascii.a2b_hex(binascii.b2a_hex(lastByte)))[0]
-                    print lastData
                     output += (str(lastData) + " ")
-                ##print "\n\n" + output + "\n"
-                #print len(output)
+                print "\n\n" + output + "\n"
+                print len(output)
                 client_sock.send(output)
                 ##print "Scan Sent"
                 RPIO.output(18,RPIO.LOW) ##Unlight 'Scanning' LED
@@ -66,7 +65,7 @@ while True:
                 #trigger voltage booster
                 RPIO.output(18,RPIO.HIGH)
                 RPIO.output(7,RPIO.HIGH) ##Zap
-                time.sleep(1)
+                time.sleep(0.5)
                 RPIO.output(7,RPIO.LOW) ##Safe
                 RPIO.output(18,RPIO.LOW)
 
@@ -74,19 +73,16 @@ while True:
                 #might need modification
                 specPort.write(data)
                 lastByte = None
-                LastData = None
+                #LastData = None
                 #output = ""
                 lastByte = specPort.read(1)
-                ##print lastByte
-                
-                if lastByte == '\x06':
-                    print "Acknowledged"
+
+                if lastByte == 0x06:
+
                     client_sock.send("ACK")
-                elif lastByte == '\x15':
-                    print "NAK"
+                elif lastByte == 0x15:
                     client_sock.send("NAK")
                 else:
-                    print "Bad return"
                     client_sock.send("NAK")
 
             #elif "P" in data:
@@ -132,7 +128,6 @@ while True:
 
             client_sock.close()
             server_sock.close()
-            specPort.close()
             print "all done"
             RPIO.output(16,RPIO.LOW) ##Unlight 'Ready' LED
             RPIO.output(18,RPIO.LOW) ##Unlight 'Scanning' LED
@@ -143,5 +138,4 @@ while True:
     print "connection dropped"
     RPIO.output(22,RPIO.LOW) ##Unlight 'Connected' LED
     client_sock.close()
-    
-RPIO.output(16,RPIO.LOW) ##Unlight the ready light
+

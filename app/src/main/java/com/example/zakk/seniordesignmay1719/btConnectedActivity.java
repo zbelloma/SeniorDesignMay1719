@@ -43,13 +43,16 @@ public class btConnectedActivity extends AppCompatActivity {
     private EditText integrationTime;
     private EditText wavelengthStart;
     private EditText wavelengthEnd;
-
+    private String userID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bt_connected);
+
+
+
 
         this.process =(TextView)findViewById(R.id.textView);
         this.process.setVisibility(View.GONE);

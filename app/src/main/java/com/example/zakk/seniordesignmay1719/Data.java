@@ -80,11 +80,7 @@ public class Data implements Serializable{
 
             }
         } else {
-            /* for(int i = 7; i < output_Data.length; i++){
-                parse_Pixels[i-7] = output_Data[i+3] + output_Data[i+2] + output_Data[i+1] + output_Data[i];
-                //pixel_Intensity[pixel_Index] = (65535.0/saturation_Level) * Double.parseDouble(parse_Pixels[pixel_Index]);
-                pixel_Index++;
-            }*/
+
             Log.i("as;df", "Should not be sending back DWORDS");
         }
 

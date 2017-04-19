@@ -12,6 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
@@ -28,7 +30,8 @@ public class activity_settings extends AppCompatActivity {
     private Button signOut;
     private Button connectBTN;
     private Boolean connected = false;
-    private ProgressBar scanning;
+    private Boolean scanning = false;
+    private ProgressBar scanningProgress;
 
 
 
@@ -71,8 +74,8 @@ public class activity_settings extends AppCompatActivity {
             }
         });
 
-        scanning = (ProgressBar) findViewById(R.id.scanningSpinner);
-        scanning.setVisibility(View.INVISIBLE);
+        scanningProgress = (ProgressBar) findViewById(R.id.scanningSpinner);
+        scanningProgress.setVisibility(View.INVISIBLE);
         connectBTN = (Button) findViewById(R.id.enableButton);
         if(connected) {
             connectBTN.setText("New Test");
@@ -84,6 +87,7 @@ public class activity_settings extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 if(!connected){
+                    scanningProgress.setVisibility(View.VISIBLE);
                     //This button should connect to the system
                     mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     String raspMAC = "00:1B:DC:0F:AC:3C";
@@ -92,31 +96,39 @@ public class activity_settings extends AppCompatActivity {
 
 
                     ConnectThread mConnectThread = new ConnectThread(device, false, mBluetoothAdapter);
+                    //mConnectThread.start();
 
                     try{
                         mConnected = mConnectThread.connect();
                         activity_settings.this.mOut = new ConnectedThread(mConnected); //Starts the bluetooth connection thread
                         connected = true;
+                        scanningProgress.setVisibility(View.INVISIBLE);
                         connectBTN.setText("New Test");
                         connectBTN.setBackgroundColor(0xff00ff00); //Set Button to green
 
                     } catch(IOException e){
+                        scanningProgress.setVisibility(View.INVISIBLE);
                         Log.e("CONNECT", "Connection error: " + e.getMessage());
                         Toast toast = Toast.makeText(activity_settings.this, "Unable to connect to device.", Toast.LENGTH_LONG);
                         toast.show();
                     }
                 } else {
-                    scanning.setVisibility(View.VISIBLE);
+                    Log.i("UI","Original color");
+                    scanningProgress.setVisibility(View.VISIBLE);
                     connectBTN.setText("TESTING");
                     connectBTN.setBackgroundColor(0xffff0000); //Set button to red
+
+
                     run();
+
                     connectBTN.setText("New Test");
                     connectBTN.setBackgroundColor(0xff00ff00); //Set button back to green
-                    scanning.setVisibility(View.INVISIBLE);
+                    scanningProgress.setVisibility(View.INVISIBLE);
+                    Log.i("UI","Second color");
                 }
             }
         });
-        Log.i("USER_ID: ", userID);
+        //Log.i("USER_ID: ", userID);
     }
 
     public void run() {
@@ -124,22 +136,25 @@ public class activity_settings extends AppCompatActivity {
 
         this.response = this.mOut.scan();
 
+
         if(response.length() > 18000){
 
-            data = new Data(response, this.userID, System.currentTimeMillis());
-            //final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            //DatabaseReference ref = database.getReference();
-            //ref.child("data").child(data.id).setValue(data);
+            data = new Data(response, userID, System.currentTimeMillis());
 
-            Toast toast = Toast.makeText(this.getApplicationContext(), "Scan Data added to DB", Toast.LENGTH_LONG);
-            toast.show();
-        } else if ( 0 < response.length() && response.length() < 18000){
-            Toast toast = Toast.makeText(this.getApplicationContext(), "Incorrect data was received.", Toast.LENGTH_LONG);
-            toast.show();
-        } else {
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference();
+            ref.child("data").child(data.id).setValue(data);
+
+            Toast toast2 = Toast.makeText(this.getApplicationContext(), "Scan Data added to DB", Toast.LENGTH_LONG);
+            toast2.show();
+        } else if(response == "BadScan") {
             Toast toast = Toast.makeText(this.getApplicationContext(), "No data was received.", Toast.LENGTH_LONG);
             toast.show();
+        } else {
+            Toast toast = Toast.makeText(this.getApplicationContext(), "Incorrect data was received.", Toast.LENGTH_LONG);
+            toast.show();
         }
+
 
         //Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
 

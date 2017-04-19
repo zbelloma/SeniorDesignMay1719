@@ -15,6 +15,7 @@ public class Data implements Serializable{
     public String data;
     public long time;
     public String id;
+    public String USER_ID;
     public int numScans;
     public int integrationTime;
     //public int baselineMSB;
@@ -23,8 +24,9 @@ public class Data implements Serializable{
     //public double[] pixel_Intensity;
     final double saturation_Level = 26080;
 
-    public Data(String data, long time){
+    public Data(String data, String user_id, long time){
         this.data = data;
+        this.USER_ID = user_id;
         this.time = time;
         this.id = "" + this.time;
         this.pixels = output_to_pixels(this.data);

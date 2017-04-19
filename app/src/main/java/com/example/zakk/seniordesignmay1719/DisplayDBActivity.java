@@ -121,7 +121,7 @@ public class DisplayDBActivity extends AppCompatActivity implements Serializable
 
     public void setData(View view){
         long time = System.currentTimeMillis();
-        Data d = new Data("testdata1234", time);
+        Data d = new Data("testdata1234", "USER_ID", time);
         ref.child("data").child(d.id).setValue(d);
     }
 

@@ -190,7 +190,7 @@ public class btConnectedActivity extends AppCompatActivity {
 
         if(response.length() > 18000){
 
-            data = new Data(response, System.currentTimeMillis());
+            data = new Data(response, "user_ID", System.currentTimeMillis());
             //final FirebaseDatabase database = FirebaseDatabase.getInstance();
             //DatabaseReference ref = database.getReference();
             //ref.child("data").child(data.id).setValue(data);

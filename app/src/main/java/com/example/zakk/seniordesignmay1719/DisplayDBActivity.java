@@ -124,11 +124,11 @@ public class DisplayDBActivity extends AppCompatActivity implements Serializable
         startActivity(intent);
     }
 
-    public void setData(View view){
+/*    public void setData(View view){
         long time = System.currentTimeMillis();
         Data d = new Data("testdata1234", "USER_ID", time);
         ref.child("data").child(d.id).setValue(d);
-    }
+    }*/
 
     public void goBack(View view){
         Intent intent = new Intent(this, MainActivity.class);

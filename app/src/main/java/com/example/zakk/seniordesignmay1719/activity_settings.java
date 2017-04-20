@@ -32,9 +32,12 @@ public class activity_settings extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button signOut;
     private Button connectBTN;
+    private Button integrationBTN;
+    private Button wavelengthBTN;
     private Boolean connected = false;
-    private Boolean scanning = false;
+    //private Boolean scanning = false;
     private ProgressBar scanningProgress;
+
 
 
 
@@ -42,7 +45,8 @@ public class activity_settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        findViewById(R.id.SettingsMenu).setVisibility(View.GONE);
+        findViewById(R.id.MainMenu).setVisibility(View.VISIBLE);
         if(mConnected != null){
             connected = true;
         }
@@ -79,14 +83,15 @@ public class activity_settings extends AppCompatActivity {
         });
 
         scanningProgress = (ProgressBar) findViewById(R.id.scanningSpinner);
-        scanningProgress.setVisibility(View.INVISIBLE);
+        //scanningProgress.getIndeterminateDrawable().setColorFilter(0x000000, android.graphics.PorterDuff.Mode.MULTIPLY);
+        scanningProgress.setVisibility(View.GONE);
+
         connectBTN = (Button) findViewById(R.id.enableButton);
         if(connected) {
             connectBTN.setText("New Test");
             connectBTN.setBackgroundColor(0xff00ff00); //Set Button to green
-        } else {
-            connectBTN.setBackgroundColor(0xffffff00); //Set button to yellow
         }
+
         connectBTN.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -118,27 +123,42 @@ public class activity_settings extends AppCompatActivity {
                     }
                 } else {
                     Log.i("UI","Original color");
-
-
-//                    scanningProgress.setVisibility(View.VISIBLE);
-//                    connectBTN.setText("TESTING");
-//                    connectBTN.setBackgroundColor(0xffff0000); //Set button to red
-//
-//
-//                    run();
-//
-//                    connectBTN.setText("New Test");
-//                    connectBTN.setBackgroundColor(0xff00ff00); //Set button back to green
-//                    scanningProgress.setVisibility(View.INVISIBLE);
+                    scanningProgress.setVisibility(View.VISIBLE);
+                    connectBTN.setText("TESTING");
+                    connectBTN.setBackgroundColor(0xffff0000); //Set button to red
 
                     //this should do what we want
-                    new runAsync().execute();
+                    //run();
+                    new runAsync().execute(); //Seperate thread changes the UI
+                    //Executes communication
+
+
 
                     Log.i("UI","Second color");
                 }
             }
         });
-        //Log.i("USER_ID: ", userID);
+
+        integrationBTN = (Button) findViewById(R.id.integrationBTN);
+        integrationBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            //Currently none functional, toast user to say work in progress.
+                Toast toast = Toast.makeText(activity_settings.this, "Work in progress...", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
+
+        wavelengthBTN = (Button) findViewById(R.id.wavelengthBTN);
+        wavelengthBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Currently none functional, toast user to say work in progress.
+                Toast toast = Toast.makeText(activity_settings.this, "Work in progress...", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
+
         Button openSettingsButton = (Button) findViewById(R.id.OpenSettings);
         openSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,10 +176,17 @@ public class activity_settings extends AppCompatActivity {
         });
 
         Button shutDownButton = (Button) findViewById(R.id.shutdownBTN);
-        closeSettingsButton.setOnClickListener(new View.OnClickListener() {
+        shutDownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOut.shutdown();
+                if(connected) {
+                    Toast toast = Toast.makeText(activity_settings.this, "Shutting down system.", Toast.LENGTH_LONG);
+                    toast.show();
+                    mOut.shutdown();
+                } else {
+                    Toast toast = Toast.makeText(activity_settings.this, "Must establish connection first.", Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
         });
 
@@ -167,9 +194,13 @@ public class activity_settings extends AppCompatActivity {
 
     private class runAsync extends AsyncTask<Void, Void, Void> {
 
+        private String toastMess = "SHOULD NOT HAPPEN";
+
         @Override
         protected Void doInBackground(Void... args) {
-            run();
+            //Maybe need to refresh the UI here?
+            //...
+            toastMess = run(); //Unsure of exactly how long runs will take, should not perform the communication in this thread
             return null;
         }
 
@@ -177,7 +208,9 @@ public class activity_settings extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             connectBTN.setText("New Test");
             connectBTN.setBackgroundColor(0xff00ff00); //Set button back to green
-            scanningProgress.setVisibility(View.INVISIBLE);
+            scanningProgress.setVisibility(View.GONE);
+            Toast toast2 = Toast.makeText(activity_settings.this, toastMess, Toast.LENGTH_LONG);
+            toast2.show();
             super.onPostExecute(result);
         }
 
@@ -187,11 +220,39 @@ public class activity_settings extends AppCompatActivity {
             scanningProgress.setVisibility(View.VISIBLE);
             connectBTN.setText("TESTING");
             connectBTN.setBackgroundColor(0xffff0000);
+
         }
     }
 
-    public void run() {
-        response = "";
+    /*private class runDBAsync extends AsyncTask<Void, Void, Void> {
+
+        private byte[] str_data;
+        private String USER_ID;
+
+        private runDBAsync(byte[] response, String userID){
+            this.str_data = response;
+            this.USER_ID = userID;
+        }
+
+        @Override
+        protected Void doInBackground(Void... args) {
+
+            data = new Data(this.str_data, this.USER_ID, System.currentTimeMillis());
+
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference();
+            ref.child("data").child(data.id).setValue(data);
+
+            Toast toast2 = Toast.makeText(activity_settings.this, "Scan Data added to DB", Toast.LENGTH_LONG);
+            toast2.show();
+
+            return null;
+        }
+    }*/
+
+
+    public String run() {
+        //response = "";
 
         this.response = this.mOut.scan();
 
@@ -203,20 +264,17 @@ public class activity_settings extends AppCompatActivity {
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference ref = database.getReference();
             ref.child("data").child(data.id).setValue(data);
+            return "Scan complete...\nAdded to database";
 
-            Toast toast2 = Toast.makeText(this.getApplicationContext(), "Scan Data added to DB", Toast.LENGTH_LONG);
-            toast2.show();
-        } else if(response == "BadScan") {
-            Toast toast = Toast.makeText(this.getApplicationContext(), "No data was received.", Toast.LENGTH_LONG);
-            toast.show();
+        } else if(response.length() == 0) {
+            //Toast toast = Toast.makeText(this.getApplicationContext(), "No data was received.", Toast.LENGTH_LONG);
+            //toast.show();
+            return "No data was received";
         } else {
-            Toast toast = Toast.makeText(this.getApplicationContext(), "Incorrect data was received.", Toast.LENGTH_LONG);
-            toast.show();
+            //Toast toast = Toast.makeText(this.getApplicationContext(), "Incorrect data was received.", Toast.LENGTH_LONG);
+            //toast.show();
+            return "Incorrect data was received";
         }
-
-
-        //Log.i("Dislay", data.getTime() + "\n" + data.numScans + "\n" + data.getIntegrationTime() + "\n");
-
     }
 
     public void dbview(View view){
@@ -226,13 +284,13 @@ public class activity_settings extends AppCompatActivity {
 
 
     public void showSettings(){
-        findViewById(R.id.MainMenu).setVisibility(View.INVISIBLE);
+        findViewById(R.id.MainMenu).setVisibility(View.GONE);
         findViewById(R.id.SettingsMenu).setVisibility(View.VISIBLE);
     }
 
     public void hideSettings(){
         findViewById(R.id.MainMenu).setVisibility(View.VISIBLE);
-        findViewById(R.id.SettingsMenu).setVisibility(View.INVISIBLE);
+        findViewById(R.id.SettingsMenu).setVisibility(View.GONE);
     }
 
 }

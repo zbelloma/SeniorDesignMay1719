@@ -63,7 +63,7 @@ public class ConnectedThread extends Thread {
 
         byte[] sendComm = "S".getBytes();
 
-        String recv = "";
+        String recv;
 
         //Call communication method
         recv = communication(sendComm, 15000);
@@ -71,7 +71,7 @@ public class ConnectedThread extends Thread {
         if(TextUtils.isEmpty(recv)){
             Log.i("Scan","Scan did not perform properly");
 
-            return "BadScan";
+            return recv;
         } else {
             return recv;
         }
@@ -102,11 +102,11 @@ public class ConnectedThread extends Thread {
             String command = "I" + time;
 
             byte[] sendComm = command.getBytes();
-            String recv = "";
+            String recv;
 
             recv = communication(sendComm, 100);
             if(recv != null){
-                if (recv == ""){
+                if (TextUtils.isEmpty(recv)){
                  return false;
                 } else if (recv.equals("ACK")) {
                  return true;

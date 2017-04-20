@@ -22,10 +22,10 @@ public class Data implements Serializable{
     //public int baselineLSB;
     public List pixels;
     //public double[] pixel_Intensity;
-    final double saturation_Level = 26080;
+    //final double saturation_Level = 26080;
 
-    public Data(String data, String user_id, long time){
-        this.data = data;
+    public Data(String scan_data, String user_id, long time){
+        this.data = scan_data;
         this.USER_ID = user_id;
         Log.i("USER_ID:", this.USER_ID);
         this.time = time;
@@ -66,25 +66,35 @@ public class Data implements Serializable{
         //this.baselineLSB = Integer.parseInt(output_Data[5]);
 
 
-        Double pixel_Intensity[] = new Double[(output_Data.length) - 8];
-        Double averagePixels[] = new Double[pixel_Intensity.length/4];
+        Double pixel_Intensity[] = new Double[3678];
+        Double averagePixels[] = new Double[651];
         int pixel_Index = 0, averageCount = 0;
 
         if(data_Mode.equals("0")){
-            for(int i = 8; i < output_Data.length-1; i++){
+            Log.e("Averaging array", "Reached here");
+            Log.e("Length", "ArrayLength: " + output_Data.length);
 
-                pixel_Intensity[i-8] = Double.parseDouble(output_Data[i]);
+            for(int i = 28; i < 3678; i++){
+
+                pixel_Intensity[i-28] = Double.parseDouble(output_Data[i]);
                 averageCount++;
-                if(averageCount == 4){
-                    averagePixels[pixel_Index] = (pixel_Intensity[i-11]+pixel_Intensity[i-10]+pixel_Intensity[i-9]+pixel_Intensity[i-8])/4;
+                if(averageCount == 5 || averageCount == 16){
+                    averagePixels[pixel_Index] = (pixel_Intensity[i-32]+pixel_Intensity[i-31]+pixel_Intensity[i-30]+pixel_Intensity[i-29]+pixel_Intensity[i-28])/5;
                     pixel_Index++;
-                    averageCount = 0;
+
+                } else if(averageCount == 11 || averageCount == 22 || averageCount == 28){
+                    averagePixels[pixel_Index] = (pixel_Intensity[i-33]+pixel_Intensity[i-32]+pixel_Intensity[i-31]+pixel_Intensity[i-30]+pixel_Intensity[i-29]+pixel_Intensity[i-28])/6;
+                    pixel_Index++;
+
+                    if(averageCount == 28){
+                        averageCount = 0;
+                    }
                 }
 
             }
         } else {
 
-            Log.i("as;df", "Should not be sending back DWORDS");
+            Log.i("WrongFormat", "Should not be sending back DWORDS");
         }
 
         //this.data = null;

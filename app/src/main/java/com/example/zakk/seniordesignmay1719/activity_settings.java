@@ -1,8 +1,11 @@
 package com.example.zakk.seniordesignmay1719;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -114,21 +117,76 @@ public class activity_settings extends AppCompatActivity {
                     }
                 } else {
                     Log.i("UI","Original color");
-                    scanningProgress.setVisibility(View.VISIBLE);
-                    connectBTN.setText("TESTING");
-                    connectBTN.setBackgroundColor(0xffff0000); //Set button to red
 
 
-                    run();
+//                    scanningProgress.setVisibility(View.VISIBLE);
+//                    connectBTN.setText("TESTING");
+//                    connectBTN.setBackgroundColor(0xffff0000); //Set button to red
+//
+//
+//                    run();
+//
+//                    connectBTN.setText("New Test");
+//                    connectBTN.setBackgroundColor(0xff00ff00); //Set button back to green
+//                    scanningProgress.setVisibility(View.INVISIBLE);
 
-                    connectBTN.setText("New Test");
-                    connectBTN.setBackgroundColor(0xff00ff00); //Set button back to green
-                    scanningProgress.setVisibility(View.INVISIBLE);
+                    //this should do what we want
+                    new runAsync().execute();
+
                     Log.i("UI","Second color");
                 }
             }
         });
         //Log.i("USER_ID: ", userID);
+        Button openSettingsButton = (Button) findViewById(R.id.OpenSettings);
+        openSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSettings();
+            }
+        });
+
+        Button closeSettingsButton = (Button) findViewById(R.id.settingsBackBTN);
+        closeSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideSettings();
+            }
+        });
+
+        Button shutDownButton = (Button) findViewById(R.id.shutdownBTN);
+        closeSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOut.shutdown();
+            }
+        });
+
+    }
+
+    private class runAsync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... args) {
+            run();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            connectBTN.setText("New Test");
+            connectBTN.setBackgroundColor(0xff00ff00); //Set button back to green
+            scanningProgress.setVisibility(View.INVISIBLE);
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            scanningProgress.setVisibility(View.VISIBLE);
+            connectBTN.setText("TESTING");
+            connectBTN.setBackgroundColor(0xffff0000);
+        }
     }
 
     public void run() {
@@ -163,6 +221,17 @@ public class activity_settings extends AppCompatActivity {
     public void dbview(View view){
         Intent intent = new Intent(this, DisplayDBActivity.class);
         startActivity(intent);
+    }
+
+
+    public void showSettings(){
+        findViewById(R.id.MainMenu).setVisibility(View.INVISIBLE);
+        findViewById(R.id.SettingsMenu).setVisibility(View.VISIBLE);
+    }
+
+    public void hideSettings(){
+        findViewById(R.id.MainMenu).setVisibility(View.VISIBLE);
+        findViewById(R.id.SettingsMenu).setVisibility(View.INVISIBLE);
     }
 
 }

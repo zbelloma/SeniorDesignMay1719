@@ -160,4 +160,9 @@ public class activity_settings extends AppCompatActivity {
 
     }
 
+    public void dbview(View view){
+        Intent intent = new Intent(this, DisplayDBActivity.class);
+        startActivity(intent);
+    }
+
 }

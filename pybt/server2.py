@@ -14,7 +14,7 @@ RPIO.setmode(RPIO.BOARD)
 RPIO.setup(16,RPIO.OUT, initial=RPIO.LOW) ##Ready
 RPIO.setup(18,RPIO.OUT, initial=RPIO.LOW) ##Scanning
 RPIO.setup(22,RPIO.OUT, initial=RPIO.LOW) ##Connected
-RPIO.setup(7,RPIO.OUT, initial=RPIO.LOW) ##Chinese Taser
+RPIO.setup(7,RPIO.OUT, initial=RPIO.LOW) ##Voltage booster
 
 server_sock = BluetoothSocket(RFCOMM)
 server_sock.bind(("", PORT_ANY))
@@ -33,6 +33,7 @@ profiles=[SERIAL_PORT_PROFILE],
 )
 
 RPIO.output(16,RPIO.HIGH) ##Light 'Ready' LED
+RPIO.output(7,RPIO.LOW) ##Ensure voltage booster is low
 while True:
     print "Waiting for connection on RFCOMM channel %d" % port
     client_sock, client_info = server_sock.accept()
@@ -46,7 +47,11 @@ while True:
 
             if "S" in data:
                 RPIO.output(18,RPIO.HIGH) ##Light 'Scanning' LED
-                specPort.write("S")
+                RPIO.output(7,RPIO.HIGH) ##Turn on voltage booster
+                time.sleep(0.2)
+		specPort.write("S")
+                time.sleep(0.2)
+                RPIO.output(7,RPIO.LOW) ##Turn voltagebooster off
                 lastByte = None
                 lastData = None
                 output = ""
@@ -54,21 +59,24 @@ while True:
                 while lastData != 65533:
                     lastByte = specPort.read(2)
                     lastData = struct.unpack(">H", binascii.a2b_hex(binascii.b2a_hex(lastByte)))[0]
-                    print lastData
-                    output += (str(lastData) + " ")
+                   
+                    ##output += (str(lastData) + " ")
+                    ##3lastData != 65533:
+                    #print (lastData)
+                    client_sock.send(str(lastData) + " ")
                 ##print "\n\n" + output + "\n"
                 #print len(output)
-                client_sock.send(output)
+                ##client_sock.send(output)
                 ##print "Scan Sent"
                 RPIO.output(18,RPIO.LOW) ##Unlight 'Scanning' LED
 
             elif "zap" in data:
                 #trigger voltage booster
-                RPIO.output(18,RPIO.HIGH)
+                ##RPIO.output(18,RPIO.HIGH)
                 RPIO.output(7,RPIO.HIGH) ##Zap
-                time.sleep(1)
+                time.sleep(0.05)
                 RPIO.output(7,RPIO.LOW) ##Safe
-                RPIO.output(18,RPIO.LOW)
+                ##RPIO.output(18,RPIO.LOW)
 
             elif "I" in data:
                 #might need modification

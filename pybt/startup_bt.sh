@@ -8,5 +8,5 @@ then
 fi
 echo 0 > /home/pi/SeniorDesignMay1719/pybt/rboot.txt
 sleep 10
-#sudo python /home/pi/SeniorDesignMay1719/pybt/blueagent5.py &
-#sudo python /home/pi/SeniorDesignMay1719/pybt/server2.py &
+sudo python /home/pi/SeniorDesignMay1719/pybt/blueagent5.py &
+sudo python /home/pi/SeniorDesignMay1719/pybt/server2.py &

@@ -220,9 +220,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void dbview(View view){
-        Intent intent = new Intent(this, DisplayDBActivity.class);
-        startActivity(intent);
+    public void bypass(View view){
+        Intent signedIn = new Intent(this, activity_settings.class);
+        signedIn.putExtra("USER_ID", "temp");
+        startActivity(signedIn);
     }
 
 

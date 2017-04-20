@@ -29,6 +29,9 @@
                 android:layout_width="0px"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.5"
+                android:paddingTop="20dp"
+                android:paddingBottom="40dp"
+                android:drawableTop="@drawable/ic_bluetooth"
                 android:onClick="enableBluetooth (MainActivity)"
                 android:text="Connect" />
 
@@ -37,6 +40,10 @@
                 android:layout_width="0px"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.5"
+                android:paddingTop="20dp"
+                android:paddingBottom="40dp"
+                android:drawableTop="@drawable/ic_history"
+                android:backgroundTint="@color/blue"
                 android:onClick="dbview"
                 android:text="History" />
         </LinearLayout>
@@ -53,7 +60,10 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/tutorial"
                 android:onClick="beginTutorial"
-                android:drawable = "@color/red"
+                android:paddingTop="20dp"
+                android:paddingBottom="40dp"
+                android:drawableTop="@drawable/ic_info_24px"
+                android:backgroundTint="@color/darkgreen"
                 android:layout_weight="0.5" />
 
             <Button
@@ -61,6 +71,10 @@
                 android:layout_width="0px"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.5"
+                android:paddingTop="20dp"
+                android:paddingBottom="40dp"
+                android:drawableTop="@drawable/ic_settings_icon"
+                android:backgroundTint="@color/orengeRed"
                 android:text="Settings" />
         </LinearLayout>
 

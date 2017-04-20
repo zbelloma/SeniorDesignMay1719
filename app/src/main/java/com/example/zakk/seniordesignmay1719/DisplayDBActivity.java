@@ -15,7 +15,9 @@ import android.widget.AdapterView;
 import java.io.Serializable;
 
 
-
+import com.google.firebase.*;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +41,9 @@ public class DisplayDBActivity extends AppCompatActivity implements Serializable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.e("USER", user.getUid().toString());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_db);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();

@@ -1,3 +1,11 @@
+/**
+ * ------------------
+ * THIS IS NOT IN USE
+ * USED FOR REFERENCE
+ * ------------------
+ */
+
+
 package com.example.zakk.seniordesignmay1719;
 
 import android.app.ProgressDialog;
@@ -43,13 +51,16 @@ public class btConnectedActivity extends AppCompatActivity {
     private EditText integrationTime;
     private EditText wavelengthStart;
     private EditText wavelengthEnd;
-
+    private String userID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bt_connected);
+
+
+
 
         this.process =(TextView)findViewById(R.id.textView);
         this.process.setVisibility(View.GONE);
@@ -186,11 +197,11 @@ public class btConnectedActivity extends AppCompatActivity {
     public void run() {
         response = "";
 
-        this.response = this.mOut.scan();
+        //this.response = this.mOut.scan();
 
         if(response.length() > 18000){
 
-            data = new Data(response, System.currentTimeMillis());
+            //data = new Data(response, "user_ID", System.currentTimeMillis());
             //final FirebaseDatabase database = FirebaseDatabase.getInstance();
             //DatabaseReference ref = database.getReference();
             //ref.child("data").child(data.id).setValue(data);

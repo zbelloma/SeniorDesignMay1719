@@ -83,67 +83,95 @@
 
 
     <Button
-        android:text="Set Integration Time"
+        android:id="@+id/integrationBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/integrationBTN"
-        android:visibility="visible"
-        android:layout_below="@+id/shutdownBTN"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/integrationTime"
+        android:height="75dp"
+        android:background="@color/blue"
+        android:text="Set Integration Time"
+        android:textSize="32sp"
+        android:visibility="visible" />
 
     <EditText
+        android:id="@+id/integrationTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:height="70dp"
         android:ems="10"
-        android:id="@+id/integrationTime"
-        android:visibility="visible"
-        android:layout_below="@+id/integrationBTN"
-        android:layout_centerHorizontal="true"
-        android:hint="Enter time here"/>
+        android:hint="Enter time here"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:visibility="visible" />
 
     <Button
-        android:text="Set Wavelength Range"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/wavelengthBTN"
-        android:layout_marginTop="45dp"
-        android:visibility="visible"
-        android:layout_below="@+id/integrationTime"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Start Wavelength"
-        android:ems="10"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/wavelengthEnd"
+        android:height="75dp"
+        android:background="@color/blue"
+        android:text="Set Wavelength Range"
+        android:textSize="32sp"
+        android:visibility="visible" />
+
+    <EditText
         android:id="@+id/wavelengthStart"
-        android:visibility="visible"
-        android:layout_below="@+id/wavelengthBTN"
-        android:layout_alignLeft="@+id/integrationTime"
-        android:layout_alignStart="@+id/integrationTime" />
-
-    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="End Wavelength"
+        android:height="70dp"
         android:ems="10"
-        android:id="@+id/wavelengthEnd"
+        android:hint="Start Wavelength"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textSize="30sp"
         android:visibility="visible"
+        android:layout_below="@+id/integrationBTN"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp" />
+
+    <EditText
+        android:id="@+id/wavelengthEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/wavelengthStart"
-        android:layout_alignLeft="@+id/wavelengthStart"
-        android:layout_alignStart="@+id/wavelengthStart" />
+        android:height="70dp"
+        android:ems="10"
+        android:hint="End Wavelength"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:visibility="visible" />
 
     <Button
             android:text="Back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/settingsBackBTN"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="36dp"
-            android:visibility="visible" />
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/wavelengthBTN"
+        android:layout_marginTop="13dp"
+        android:height="75dp"
+        android:background="@color/red"
+        android:text="SHUT DOWN"
+        android:textSize="32sp" />
 
 </RelativeLayout>

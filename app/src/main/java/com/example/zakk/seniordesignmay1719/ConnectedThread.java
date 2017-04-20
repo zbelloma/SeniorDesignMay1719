@@ -1,11 +1,17 @@
 package com.example.zakk.seniordesignmay1719;
 
 import android.bluetooth.BluetoothSocket;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import static android.R.attr.button;
 
 /**
  * Created by Zakk on 11/10/2016.
@@ -16,7 +22,8 @@ public class ConnectedThread extends Thread {
     public InputStream inStream;
     public OutputStream outStream;
     private android.util.Log Log;
-
+    private Button testing;
+    private ProgressBar scanning;
     /**
      * Creates the ConnectedThread, takes in a BluetoothSocketWrapper.
      * From the socket, it sets this threads input and output streams to be associated with
@@ -25,6 +32,9 @@ public class ConnectedThread extends Thread {
      */
     public ConnectedThread(BluetoothSocketWrapper socket){
         mmSocket = socket;
+        this.testing = testing;
+        this.scanning = scanning;
+
         InputStream in = null;
         OutputStream out = null;
 
@@ -43,6 +53,7 @@ public class ConnectedThread extends Thread {
         }
     }
 
+
     /**
      * Function to send the scan command to the spectrometer.
      * Acquires the pixel data sent back from the spectrometer.
@@ -52,13 +63,14 @@ public class ConnectedThread extends Thread {
 
         byte[] sendComm = "S".getBytes();
 
-        String recv = "";
+        String recv;
 
         //Call communication method
-        recv = communication(sendComm, 30000);
+        recv = communication(sendComm, 15000);
 
-        if(recv == null || "".equals(recv)){
+        if(TextUtils.isEmpty(recv)){
             Log.i("Scan","Scan did not perform properly");
+
             return recv;
         } else {
             return recv;
@@ -90,11 +102,11 @@ public class ConnectedThread extends Thread {
             String command = "I" + time;
 
             byte[] sendComm = command.getBytes();
-            String recv = "";
+            String recv;
 
             recv = communication(sendComm, 100);
             if(recv != null){
-                if (recv == ""){
+                if (TextUtils.isEmpty(recv)){
                  return false;
                 } else if (recv.equals("ACK")) {
                  return true;
@@ -163,11 +175,32 @@ public class ConnectedThread extends Thread {
      */
     private String communication(byte[] command, long sleepTime){
         byte[] recvData;
+
+        recvData = new byte[18374];
+
         String recv = "";
 
         try {
             if (this.mmSocket.getUnderlyingSocket().isConnected()) {
                 this.outStream.write(command);
+
+                long start = System.currentTimeMillis();
+                int i = 0;
+                while(i < 18374){
+
+                        this.inStream.read(recvData, i, 1);
+
+                    i++;
+                    //Log.i("I", "i=" + i);
+                }
+                // long end = System.currentTimeMillis();
+                //Log.i("Difference", "" + (end - start));
+                //Toast toast = Toast.makeText(this, "Done Scanning\nAdding to Database", Toast.LENGTH_SHORT);
+                //toast.show();
+                recv = new String(recvData);
+                //Log.i("Response", recv);
+
+
 
 
                 //Sleep time depends on the command sent to the spectrometer
@@ -178,7 +211,7 @@ public class ConnectedThread extends Thread {
                 }
 
 
-                Log.e("Stream_", "Available: " + this.inStream.available());
+/*                Log.e("Stream_", "Available: " + this.inStream.available());
                 int dataAvailable = this.inStream.available();
                 if (dataAvailable == 0) {
                     Log.i("READ", "No data was sent back.");
@@ -188,7 +221,7 @@ public class ConnectedThread extends Thread {
                     recvData = new byte[this.inStream.available()];
                     this.inStream.read(recvData);
                     recv = new String(recvData);
-                }
+                }*/
 
             }
             //Log.i("Connection", "Is this still connected? " + this.mmSocket.getUnderlyingSocket().isConnected());

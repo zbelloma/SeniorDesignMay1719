@@ -55,7 +55,7 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 import static android.R.id.button1;
 import static android.R.id.progress;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final String TAG = "FirebaseUser";
     BluetoothAdapter mBluetoothAdapter;

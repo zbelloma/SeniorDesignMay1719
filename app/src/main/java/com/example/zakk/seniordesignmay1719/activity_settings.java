@@ -1,5 +1,6 @@
 package com.example.zakk.seniordesignmay1719;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
@@ -20,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
-public class activity_settings extends AppCompatActivity {
+public class activity_settings extends Activity {
 
     public BluetoothAdapter mBluetoothAdapter;
     private BluetoothSocketWrapper mConnected;
@@ -125,7 +126,7 @@ public class activity_settings extends AppCompatActivity {
                     Log.i("UI","Original color");
                     scanningProgress.setVisibility(View.VISIBLE);
                     connectBTN.setText("TESTING");
-                    connectBTN.setBackgroundColor(0xffff0000); //Set button to red
+                    //connectBTN.setBackgroundColor(0xffff0000); //Set button to red
 
                     //this should do what we want
                     //run();

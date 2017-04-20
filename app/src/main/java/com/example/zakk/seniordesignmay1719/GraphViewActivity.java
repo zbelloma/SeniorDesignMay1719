@@ -12,12 +12,13 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.*;
 
+import java.io.Serializable;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.*;
 
-public class GraphViewActivity extends AppCompatActivity {
+public class GraphViewActivity extends Activity{
 
     private XYPlot plot;
 //    Data dataObj = (Data)getIntent().getSerializableExtra("Data");
@@ -30,7 +31,11 @@ public class GraphViewActivity extends AppCompatActivity {
 
         //get extra
         ArrayList<Double> listDouble = (ArrayList<Double>) getIntent().getSerializableExtra("Data");
-        Log.e("TEST", listDouble.toString());
+        if(listDouble == null){
+            Log.e("ERROR", "no pixel data");
+            return;
+        }
+        //Log.e("TEST", listDouble.toString());
 
         final Number[] arr = new Number[listDouble.size()];
         for(int i = 0; i < listDouble.size(); i++){
@@ -38,9 +43,9 @@ public class GraphViewActivity extends AppCompatActivity {
         }
 
         final Number[] xAxisVals = new Number[arr.length];
-        xAxisVals[0] = 300;
+        xAxisVals[0] = 350;
         for(int i = 1; i < xAxisVals.length; i++){
-            Double temp = xAxisVals[i-1].doubleValue() + .75;
+            Double temp = xAxisVals[i-1].doubleValue() + 1;
             xAxisVals[i] = temp;
             Log.e("TEST", xAxisVals[i].toString());
         }
@@ -78,9 +83,9 @@ public class GraphViewActivity extends AppCompatActivity {
             @Override
             public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
                 double i = Math.round(((Number) obj).floatValue());
-                i = i * 0.75; //test this in a second
+                int a = (int) i;
 
-                return toAppendTo.append(i);
+                return toAppendTo.append(a);
             }
             @Override
             public Object parseObject(String source, ParsePosition pos) {

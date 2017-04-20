@@ -65,13 +65,14 @@ public class DisplayDBActivity extends Activity implements Serializable {
             {
                 Log.e("TEST", "Item clicked: " + position);
                 final String fetched = parent.getItemAtPosition(position).toString();
-                //Log.e("TEST", fetched);
+                Log.e("TEST", fetched);
                 //getAndDisplayData(fetched);
                 ///fetched = "1487866379226"; //temp
                 Dataref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         DataSnapshot data = dataSnapshot.child(fetched);
+                       // Log.e("VALUE", data.getValue().toString());
                         ArrayList<Double> valueToPass = (ArrayList<Double>) data.child("pixels").getValue();
                         //Log.e("TEST", valueToPass.toString());
                         getAndDisplayData(valueToPass);
@@ -96,10 +97,14 @@ public class DisplayDBActivity extends Activity implements Serializable {
                     data.time = (long) postSnapshot.child("time").getValue();
                     //Log.e("ID", data.id);
                     data.pixels = (List<Double>) postSnapshot.child("pixels").getValue();
-//                    Log.e("DATA", data.pixels.toString());
+                    if(data.pixels!=null) {
+                        Log.e("DATA", data.pixels.toString());
+                        Log.e("ID", data.id);
+                    }
   //                  System.out.println(data.id);
                     if (data.pixels != null && !listViewData.contains(data.id)) {
-                        listViewData.add(convertTime(data.time));
+                        //listViewData.add(convertTime(data.time));
+                        listViewData.add(data.id);
                         Log.e("LIST", "added");
                     }
                 }
@@ -117,16 +122,12 @@ public class DisplayDBActivity extends Activity implements Serializable {
 
 
     public void getAndDisplayData(ArrayList<Double> value){
-        Intent intent = new Intent(this, GraphViewActivity.class);
-        intent.putExtra("Data", value);
-
- //       Double[] test = new Double[value.size()];
- //       for(int i = 0; i < value.size(); i++){
- //           test[i] = value.get(i);
- //       }
-
-        //Log.e("Data", valueArray.toString());
-        startActivity(intent);
+        if(value != null) {
+            Intent intent = new Intent(this, GraphViewActivity.class);
+            intent.putExtra("Data", value);
+            startActivity(intent);
+        }
+        else{Log.e("NULL", "Value to pass is null");}
     }
 
 /*    public void setData(View view){

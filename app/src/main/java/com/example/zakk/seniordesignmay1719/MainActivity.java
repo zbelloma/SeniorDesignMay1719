@@ -227,22 +227,5 @@ public class MainActivity extends Activity {
     }
 
 
-    public void beginTutorial(View view){
-        Button button1 = (Button) findViewById(R.id.tutorial);
-        Button button2 = (Button) findViewById(R.id.db_button);
-        Button button3 = (Button) findViewById(R.id.enableButton);
-       // new MaterialShowcaseView.Builder(this).setTarget(button1).setDismissText("DISMISS").setContentText("This button starts the tutorial, but you already know that").show();
-        ShowcaseConfig config = new ShowcaseConfig();
-        config.setDelay(500);
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this , "ID");
-        sequence.setConfig(config);
-        sequence.addSequenceItem(button1, "This button starts the tutorial, but you already know that", "Got It!");
-        sequence.addSequenceItem(button3, "This button will start a connection to the Raspberry Pi", "Got It!");
-        sequence.addSequenceItem(button2, "This button will go to the database", "Got It!");
-
-        sequence.start();
-
-    }
-
 }
 

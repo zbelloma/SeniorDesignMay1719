@@ -38,6 +38,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_weight="0.50"
+                android:paddingTop="20dp"
                 android:background="#FF8C00"
                 android:drawableTop="@drawable/ic_bluetooth"
                 android:text="Connect" />

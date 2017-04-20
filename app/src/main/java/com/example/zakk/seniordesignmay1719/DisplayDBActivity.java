@@ -1,5 +1,6 @@
 package com.example.zakk.seniordesignmay1719;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -25,12 +26,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DisplayDBActivity extends AppCompatActivity implements Serializable {
+public class DisplayDBActivity extends Activity implements Serializable {
 
     ListView lv;
     ArrayAdapter<String> arrAdapter;
@@ -89,12 +93,13 @@ public class DisplayDBActivity extends AppCompatActivity implements Serializable
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren() ) {
                     Data data = new Data();
                     data.id = (String) postSnapshot.child("id").getValue();
+                    data.time = (long) postSnapshot.child("time").getValue();
                     //Log.e("ID", data.id);
                     data.pixels = (List<Double>) postSnapshot.child("pixels").getValue();
 //                    Log.e("DATA", data.pixels.toString());
   //                  System.out.println(data.id);
                     if (data.pixels != null && !listViewData.contains(data.id)) {
-                        listViewData.add(data.id);
+                        listViewData.add(convertTime(data.time));
                         Log.e("LIST", "added");
                     }
                 }
@@ -133,5 +138,11 @@ public class DisplayDBActivity extends AppCompatActivity implements Serializable
     public void goBack(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public String convertTime(long time){
+        Date date = new Date(time);
+        Format format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        return format.format(date);
     }
 }

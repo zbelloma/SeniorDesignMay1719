@@ -27,6 +27,7 @@ public class Data implements Serializable{
     public Data(String data, String user_id, long time){
         this.data = data;
         this.USER_ID = user_id;
+        Log.i("USER_ID:", this.USER_ID);
         this.time = time;
         this.id = "" + this.time;
         this.pixels = output_to_pixels(this.data);
@@ -54,7 +55,7 @@ public class Data implements Serializable{
         }*/
         //input = input.substring(startIndex, input.length() - 1);
 
-        Log.i("Data", input);
+        //Log.i("Data", input);
         String[] output_Data = input.split(" ");
         Log.i("Data", "Data length: " + output_Data.length + "\nLast word: " + output_Data[output_Data.length -1]);
 
@@ -72,7 +73,7 @@ public class Data implements Serializable{
         if(data_Mode.equals("0")){
             for(int i = 8; i < output_Data.length-1; i++){
 
-                pixel_Intensity[i-8] = (65535.0/saturation_Level) * Double.parseDouble(output_Data[i]);
+                pixel_Intensity[i-8] = Double.parseDouble(output_Data[i]);
                 averageCount++;
                 if(averageCount == 4){
                     averagePixels[pixel_Index] = (pixel_Intensity[i-11]+pixel_Intensity[i-10]+pixel_Intensity[i-9]+pixel_Intensity[i-8])/4;
@@ -87,8 +88,8 @@ public class Data implements Serializable{
         }
 
         //this.data = null;
-        Log.i("Data","Data String: " + this.data.toString());
-                Log.i("Data", "Averaged Array: " + averagePixels.length);
+        //Log.i("Data","Data String: " + this.data.toString());
+        Log.i("Data", "Averaged Array: " + averagePixels.length);
         return Arrays.asList(averagePixels);
     }
 

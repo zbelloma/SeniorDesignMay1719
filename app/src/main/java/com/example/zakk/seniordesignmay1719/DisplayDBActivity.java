@@ -26,13 +26,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class DisplayDBActivity extends Activity implements Serializable {
 
@@ -64,8 +67,13 @@ public class DisplayDBActivity extends Activity implements Serializable {
                                     long id)
             {
                 Log.e("TEST", "Item clicked: " + position);
-                final String fetched = parent.getItemAtPosition(position).toString();
-                Log.e("TEST", fetched);
+                String fetched1 = parent.getItemAtPosition(position).toString();
+                Log.e("TEST", fetched1);
+
+                long time = stringToTime(fetched1);
+                final String test4 = Objects.toString(time, null);
+                Log.e("TEST", test4);
+                final String fetched = test4;//parent.getItemAtPosition(position).toString();
                 //getAndDisplayData(fetched);
                 ///fetched = "1487866379226"; //temp
                 Dataref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -95,7 +103,11 @@ public class DisplayDBActivity extends Activity implements Serializable {
                     Data data = new Data();
                     data.id = (String) postSnapshot.child("id").getValue();
                     data.time = (long) postSnapshot.child("time").getValue();
-                    //Log.e("ID", data.id);
+
+                    String temp = convertTime(data.time);
+                    String s = Objects.toString(temp, null);
+                    Log.e("Time", s);
+
                     data.pixels = (List<Double>) postSnapshot.child("pixels").getValue();
                     if(data.pixels!=null) {
                         Log.e("DATA", data.pixels.toString());
@@ -103,8 +115,10 @@ public class DisplayDBActivity extends Activity implements Serializable {
                     }
   //                  System.out.println(data.id);
                     if (data.pixels != null && !listViewData.contains(data.id)) {
-                        //listViewData.add(convertTime(data.time));
-                        listViewData.add(data.id);
+                        listViewData.add(convertTime(data.time));
+                        //listViewData.add(data.id);
+                        //listViewData.add(Objects.toString(data.time,null));
+
                         Log.e("LIST", "added");
                     }
                 }
@@ -143,7 +157,22 @@ public class DisplayDBActivity extends Activity implements Serializable {
 
     public String convertTime(long time){
         Date date = new Date(time);
-        Format format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Format format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
         return format.format(date);
     }
+
+
+    public long stringToTime(String time){
+        DateFormat date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
+        Date newDate = null;
+        try {
+            newDate = date.parse(time);
+        }
+        catch (ParseException e){
+            e.printStackTrace();
+        }
+
+        return newDate.getTime();
+    }
+
 }

@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.lang.Double.valueOf;
+
 public class DisplayDBActivity extends Activity implements Serializable {
 
     ListView lv;
@@ -110,8 +112,14 @@ public class DisplayDBActivity extends Activity implements Serializable {
 
                     data.pixels = (List<Double>) postSnapshot.child("pixels").getValue();
                     if(data.pixels!=null) {
-                        Log.e("DATA", data.pixels.toString());
-                        Log.e("ID", data.id);
+
+                        ArrayList<Integer> t = calcPeaks(data.pixels);
+
+                        //double t = a.get(50);
+                        Log.e("PEAKS", t.toString());
+
+                        //Log.e("DATA", data.pixels.toString());
+                        //Log.e("ID", data.id);
                     }
   //                  System.out.println(data.id);
                     if (data.pixels != null && !listViewData.contains(data.id)) {
@@ -173,6 +181,38 @@ public class DisplayDBActivity extends Activity implements Serializable {
         }
 
         return newDate.getTime();
+    }
+
+    /*
+    calculates the number of peaks and the wavelength they happen at
+    it works by finding the local max for every 50nm, may expand by adding and avg too
+     */
+    ArrayList<Integer> calcPeaks(List<Object> arr){
+        ArrayList<Integer> wavelengths = new ArrayList<>();
+        double minIntensity = 1700;
+        double localMax = 0;
+        int position = 0;
+        int range = 50;
+
+        //System.out.println();
+
+        for(int i = 0; i < arr.size()/range; i++){
+            for(int j = 0; j < range; j++){
+                int pos = (i * range) + j;
+                double a =  valueOf((arr.get(pos).toString()));
+                if(a > localMax){
+                    localMax = a;
+                    position = pos + 350;
+                }
+            }
+            if(localMax > minIntensity){
+                wavelengths.add(position);
+            }
+            localMax = 0;
+            position = 0;
+        }
+
+        return wavelengths;
     }
 
 }

@@ -7,5 +7,6 @@
     <color name ="darkgreen">#00ab00</color>
     <color name ="orengeRed">#FF7F50</color>
     <color name="blue">#008fff</color>
-    <color name="purple">#9932CC</color>
+    <color name="purple">#9932CC</color>\
+    <color name="grey">#acacac</color>
 </resources>

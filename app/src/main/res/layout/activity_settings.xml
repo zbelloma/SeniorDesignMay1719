@@ -101,7 +101,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_weight="0.5"
-                android:background="@color/orengeRed"
+                android:background="@color/grey"
                 android:drawableTop="@drawable/ic_settings_icon"
                 android:paddingBottom="40dp"
                 android:paddingTop="20dp"

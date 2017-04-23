@@ -45,6 +45,7 @@ public class DisplayDBActivity extends Activity implements Serializable {
     ArrayAdapter<String> arrAdapter;
     List<String> listViewData = new ArrayList<String>();
     List<String> tempViewData = new ArrayList<String>();
+    ArrayList<Integer> peaks = new ArrayList<>();
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference();
 
@@ -75,6 +76,7 @@ public class DisplayDBActivity extends Activity implements Serializable {
                 long time = stringToTime(fetched1);
                 final String test4 = Objects.toString(time, null);
                 Log.e("TEST", test4);
+                Log.e("PeaksInital", peaks.toString());
                 final String fetched = test4;//parent.getItemAtPosition(position).toString();
                 //getAndDisplayData(fetched);
                 ///fetched = "1487866379226"; //temp
@@ -84,8 +86,21 @@ public class DisplayDBActivity extends Activity implements Serializable {
                         DataSnapshot data = dataSnapshot.child(fetched);
                        // Log.e("VALUE", data.getValue().toString());
                         ArrayList<Double> valueToPass = (ArrayList<Double>) data.child("pixels").getValue();
+
+                        List<Object> p = (List<Object>) data.child("pixels").getValue();
+                        if(p != null) {
+                            peaks.clear();
+                            peaks = calcPeaks(p);
+                            //double t = a.get(50);
+                            Log.e("PEAKS", p.toString());
+
+                            //Log.e("DATA", data.pixels.toString());
+                            //Log.e("ID", data.id);
+                        }
+
                         //Log.e("TEST", valueToPass.toString());
-                        getAndDisplayData(valueToPass);
+                        //Log.e("Actual0", peaks.get(0).toString());
+                        getAndDisplayData(valueToPass, peaks);
                     }
 
                     @Override
@@ -113,10 +128,9 @@ public class DisplayDBActivity extends Activity implements Serializable {
                     data.pixels = (List<Double>) postSnapshot.child("pixels").getValue();
                     if(data.pixels!=null) {
 
-                        ArrayList<Integer> t = calcPeaks(data.pixels);
-
+                        peaks = calcPeaks(data.pixels);
                         //double t = a.get(50);
-                        Log.e("PEAKS", t.toString());
+                        Log.e("PEAKS", peaks.toString());
 
                         //Log.e("DATA", data.pixels.toString());
                         //Log.e("ID", data.id);
@@ -143,10 +157,15 @@ public class DisplayDBActivity extends Activity implements Serializable {
     }
 
 
-    public void getAndDisplayData(ArrayList<Double> value){
+    public void getAndDisplayData(ArrayList<Double> value, ArrayList<Integer> peak){
         if(value != null) {
             Intent intent = new Intent(this, GraphViewActivity.class);
             intent.putExtra("Data", value);
+            if(peak.size() != 0){
+                Log.e("PeakToAdd", peak.get(0).toString());
+                intent.putIntegerArrayListExtra("Peaks", peak);
+            }
+
             startActivity(intent);
         }
         else{Log.e("NULL", "Value to pass is null");}

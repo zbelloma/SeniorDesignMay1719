@@ -3,14 +3,30 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <com.androidplot.xy.XYPlot
-        style="@style/APDefacto.Light"
-        android:id="@+id/plot"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        ap:title=""
-        ap:rangeTitle="Intensity"
-        ap:domainTitle="Wavelength (nm)"
-        ap:lineLabels="left|bottom"
-        ap:lineLabelRotationBottom="-90"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.androidplot.xy.XYPlot
+            android:id="@+id/plot"
+            style="@style/APDefacto.Light"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            ap:domainTitle="Wavelength (nm)"
+            ap:lineLabelRotationBottom="-90"
+            ap:lineLabels="left|bottom"
+            ap:rangeTitle="Intensity"
+            ap:title="" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="11dp"
+            android:onClick="show"
+            android:text="Peaks" />
+    </RelativeLayout>
+
 </LinearLayout>

@@ -1,11 +1,19 @@
 package com.example.zakk.seniordesignmay1719;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.*;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.SimpleXYSeries;
@@ -21,6 +29,7 @@ import java.util.*;
 public class GraphViewActivity extends Activity{
 
     private XYPlot plot;
+    public ArrayList<Integer> peaks;
 //    Data dataObj = (Data)getIntent().getSerializableExtra("Data");
 
     @Override
@@ -35,6 +44,12 @@ public class GraphViewActivity extends Activity{
             Log.e("ERROR", "no pixel data");
             return;
         }
+
+        peaks = (ArrayList<Integer>) getIntent().getSerializableExtra("Peaks");
+        if(peaks != null){
+            Log.e("Peaks", peaks.toString());
+            Log.e("WORKING", "WORKING!");
+        }
         //Log.e("TEST", listDouble.toString());
 
         final Number[] arr = new Number[listDouble.size()];
@@ -47,7 +62,7 @@ public class GraphViewActivity extends Activity{
         for(int i = 1; i < xAxisVals.length; i++){
             Double temp = xAxisVals[i-1].doubleValue() + 1;
             xAxisVals[i] = temp;
-            Log.e("TEST", xAxisVals[i].toString());
+            //Log.e("TEST", xAxisVals[i].toString());
         }
 
         // initialize our XYPlot reference:
@@ -94,5 +109,38 @@ public class GraphViewActivity extends Activity{
         });
     }
 
+
+    public void peakAlert(ArrayList<Integer> peakArray){
+        StringBuilder str = new StringBuilder();
+        for(int i = 0; i < peakArray.size(); i++){
+            str.append(i+1 + ": " + peakArray.get(i).toString() + "\n");
+        }
+        String result = str.toString();
+        System.out.println(result);
+
+        Context context = getApplicationContext();
+
+
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(context, result, duration);
+        toast.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 400);
+        toast.show();
+
+
+       // AlertDialog.Builder alert = new AlertDialog.Builder(GraphViewActivity.this);
+        
+       // alert.setCancelable(true).setTitle("Peaks").setMessage(result);
+       // AlertDialog diag = alert.create();
+        //alert.create();
+        //diag.show();
+
+
+        //AlertDialog test = alert.create();
+
+    }
+
+    public void show(View view){
+        peakAlert(peaks);
+    }
 
 }
